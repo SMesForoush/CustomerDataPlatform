@@ -1,0 +1,41 @@
+version: "3"
+services:
+      
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    # ports:
+    #   - 50070:50070
+    #   - 9000:9000
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+      - ./hadoop_conf:/etc/hadoop_conf
+    environment:
+      - CLUSTER_NAME=test
+      - HADOOP_CONF_DIR=/etc/hadoop_conf
+    network_mode: "host"
+
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+      - ./hadoop_conf:/etc/hadoop_conf
+    # ports:
+    #   - 50075:50075
+    environment:
+      #- SERVICE_PRECONDITION= "namenode:50070"
+      - HADOOP_CONF_DIR=/etc/hadoop_conf
+    depends_on:
+      - namenode  
+    network_mode: "host"
+    
+  # pythondev:
+  #   image: hdfs-python
+  #   container_name: pythondev
+  #   depends_on:
+  #     - namenode
+  #     - datanode
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+
