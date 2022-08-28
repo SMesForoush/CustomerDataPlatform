@@ -6,6 +6,9 @@
 project/metals.sbt
 .metals
 
+# config
+conf/application.conf
+
 # vs code
 .vscode
 
@@ -39,3 +42,4 @@ bin/
 
 # general
 *.class
+

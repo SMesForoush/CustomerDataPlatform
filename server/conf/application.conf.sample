@@ -1,5 +1,4 @@
 # https://www.playframework.com/documentation/latest/Configuration
 auth {
-  secret = secret
+  secret = ${?JWT_SECRET_KEY}
 }
-# todo gitignore not work correctly
