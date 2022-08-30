@@ -1,0 +1,4 @@
+
+GET        /login               controllers.auth.AuthController.login()
+GET        /authenticate        controllers.auth.AuthController.authenticate()
+GET        /logout              controllers.auth.AuthController.logout()
