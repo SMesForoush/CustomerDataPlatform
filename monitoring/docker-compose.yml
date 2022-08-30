@@ -12,16 +12,16 @@ services:
   grafana:
     image: grafana/grafana
     restart: unless-stopped
-    # environment:
-    #   # - GF_SECURITY_ADMIN_USER=${ADMIN_USER}
-    #   # - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    environment:
+      - GF_SECURITY_ADMIN_USER=project_admin
+      - GF_SECURITY_ADMIN_PASSWORD=sample_pass
     #   - GF_RENDERING_SERVER_URL=http://renderer:8081/render
     #   - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
     #   - GF_LOG_FILTERS=rendering:debug
-    # volumes:
-    #   - grafana_data:/var/lib/grafana
-    #   - ./conf/grafana.ini:/etc/conf/default.ini
-    #   - grafana_provisioning:/etc/grafana/provisioning
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./conf/grafana.ini:/etc/conf/custom.ini
+      - grafana_provisioning:/etc/grafana/provisioning
     ports:
       - 3000:3000
     networks:
