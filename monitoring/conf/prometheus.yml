@@ -1,0 +1,44 @@
+global:
+  scrape_interval:     1s # By default, scrape targets every 15 seconds.
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: 'codelab-monitor'
+
+rule_files:
+  - flink.rules.yml
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    scheme: https
+    basic_auth:
+      username: sample_user
+      password: sample_passy
+    static_configs:
+      - targets: ['prom.wizedevelopment.ir']
+
+
+  - job_name: 'development server'
+    scrape_interval: 1s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: ['77.237.77.28:9100']
+
+  - job_name: '213.233.176.190'
+    static_configs:
+      - targets: ['213.233.176.190:9100']
+
+  - job_name: 'deep'
+    static_configs:
+      - targets: ['5.160.146.169:9100']
+
+  - job_name: 'kafka'
+    static_configs:
+      - targets: ['93.113.236.179:9101']
+
+  - job_name: 'flink'
+    static_configs:
+      - targets: ['93.113.236.179:9991','93.113.236.179:9992','93.113.236.179:9993']

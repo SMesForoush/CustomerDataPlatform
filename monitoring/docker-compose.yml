@@ -1,0 +1,59 @@
+version: "3.7"
+
+volumes:
+    grafana_data:
+    prometheus_data:
+    grafana_provisioning:
+
+networks:
+  monitoring_network:
+
+services:
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_RENDERING_SERVER_URL=http://renderer:8081/render
+      - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
+      - GF_LOG_FILTERS=rendering:debug
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./conf/grafana.ini:/etc/grafana/grafana.ini
+      - grafana_provisioning:/etc/grafana/provisioning
+    ports:
+      - 3000:3000
+    networks:
+      - monitoring_network
+    depends_on:
+      - prometheus
+      - renderer
+
+  renderer:
+    image: grafana/grafana-image-renderer:latest
+    ports:
+      - 8081
+    networks:
+      - monitoring_network
+    environment:
+      ENABLE_METRICS: 'true'
+
+  prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    user: root
+    volumes:
+      - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./conf/web.yml:/etc/prometheus/web.yml
+      - prometheus_data:/data
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/data'
+      - '--web.config.file=/etc/prometheus/web.yml'
+    ports:
+      - 9090:9090
+    networks:
+      - monitoring_network
+     
