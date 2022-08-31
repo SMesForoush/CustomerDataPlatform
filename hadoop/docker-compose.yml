@@ -1,6 +1,5 @@
 version: "3"
 services:
-      
   namenode:
     image: docker.repos.balad.ir/bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
     # ports:
@@ -9,6 +8,9 @@ services:
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
       - ./hadoop_conf:/etc/hadoop_conf
+    ports:
+      - "50070:50070"
+      - "9000:9000"
     environment:
       - CLUSTER_NAME=test
       - HADOOP_CONF_DIR=/etc/hadoop_conf
@@ -19,15 +21,14 @@ services:
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
       - ./hadoop_conf:/etc/hadoop_conf
-    # ports:
-    #   - 50075:50075
+#    ports:
+#      - "50075:50075"
     environment:
-      #- SERVICE_PRECONDITION= "namenode:50070"
+#      - SERVICE_PRECONDITION= "namenode:50070"
       - HADOOP_CONF_DIR=/etc/hadoop_conf
     depends_on:
-      - namenode  
+      - namenode
     network_mode: "host"
-    
   # pythondev:
   #   image: hdfs-python
   #   container_name: pythondev
@@ -39,3 +40,7 @@ volumes:
   hadoop_namenode:
   hadoop_datanode:
 
+#networks:
+#  default:
+#    name: cassandra_out_net
+#    external: true

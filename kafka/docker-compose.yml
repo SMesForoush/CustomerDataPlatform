@@ -100,6 +100,8 @@ services:
       - kafka3
     ports:
       - "8083:8083"
+    volumes:
+      - ../hadoop/hadoop_conf:/etc/hadoop_conf
     environment:
       CONNECT_BOOTSTRAP_SERVERS: 'kafka1:29092,kafka2:29093,kafka3:29094'
       CONNECT_REST_ADVERTISED_HOST_NAME: datastax-connect
@@ -118,8 +120,7 @@ services:
       CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_ZOOKEEPER_CONNECT: "zoo1:2181,zoo2:2182,zoo3:2183"
-      CONNECT_PLUGIN_PATH: /usr/share/java
-
+#      CONNECT_PLUGIN_PATH: /usr/share/java
 
 networks:
   default:
