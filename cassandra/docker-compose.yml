@@ -1,4 +1,4 @@
-version: '2.2'
+version: '3'
 services:
   cassandra1:
     image: cassandra:3.11.2
@@ -19,7 +19,7 @@ services:
       - CASSANDRA_PASSWORD=cassandra
       # By default, Cassandra autodetects the available host memory and takes as much as it can.
       # Therefore, memory options are mandatory if multiple Cassandras are launched in the same node.
-      - MAX_HEAP_SIZE=2G
+      - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=200M
   cassandra2:
     image: cassandra:3.11.2
@@ -40,7 +40,7 @@ services:
       - CASSANDRA_PASSWORD=cassandra
       # By default, Cassandra autodetects the available host memory and takes as much as it can.
       # Therefore, memory options are mandatory if multiple Cassandras are launched in the same node.
-      - MAX_HEAP_SIZE=2G
+      - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=200M
 
   cassandra-load-keyspace:
@@ -54,3 +54,6 @@ services:
       - ./schema.cql:/scripts/schema.cql
     command: /bin/bash -c "cqlsh -u cassandra -p cassandra -f /scripts/schema.cql cassandra1"
 
+networks:
+  default:
+    name: cassandra_out_net
