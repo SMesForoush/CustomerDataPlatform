@@ -113,3 +113,9 @@ services:
       CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_ZOOKEEPER_CONNECT: "zoo1:2181,zoo2:2182,zoo3:2183"
       CONNECT_PLUGIN_PATH: /usr/share/java
+
+
+networks:
+  default:
+    name: cassandra_out_net
+    external: true

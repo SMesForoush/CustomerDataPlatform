@@ -1,4 +1,4 @@
-version: '2.2'
+version: '3'
 services:
   cassandra1:
     image: cassandra:3.11.2
@@ -54,3 +54,6 @@ services:
       - ./schema.cql:/scripts/schema.cql
     command: /bin/bash -c "cqlsh -u cassandra -p cassandra -f /scripts/schema.cql cassandra1"
 
+networks:
+  default:
+    name: cassandra_out_net
