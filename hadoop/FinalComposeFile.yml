@@ -2,7 +2,7 @@ version: "3"
 services:
       
   namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    image: docker.repos.balad.ir/bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
     # ports:
     #   - 50070:50070
     #   - 9000:9000
@@ -15,7 +15,7 @@ services:
     network_mode: "host"
 
   datanode:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    image: docker.repos.balad.ir/bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
       - ./hadoop_conf:/etc/hadoop_conf

@@ -1,4 +1,4 @@
-FROM confluentinc/cp-kafka-connect-base:7.0.5
+FROM docker.repos.balad.ir/confluentinc/cp-kafka-connect-base:7.0.5
 RUN curl -O -L "https://downloads.datastax.com/kafka/kafka-connect-cassandra-sink.tar.gz"
 RUN mkdir datastax-connector
 RUN tar xzf kafka-connect-cassandra-sink.tar.gz -C datastax-connector --strip-components=1

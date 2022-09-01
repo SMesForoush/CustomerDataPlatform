@@ -1,7 +1,7 @@
 version: '3'
 services:
   cassandra1:
-    image: cassandra:3.11.2
+    image: docker.repos.balad.ir/cassandra:3.11.2
     ports:
       - "7001:7000"
       - "9042:9042"
@@ -22,7 +22,7 @@ services:
       - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=200M
   cassandra2:
-    image: cassandra:3.11.2
+    image: docker.repos.balad.ir/cassandra:3.11.2
     ports:
       - "7002:7000"
       - "9043:9042"
@@ -44,7 +44,7 @@ services:
       - HEAP_NEWSIZE=200M
 
   cassandra-load-keyspace:
-    image: cassandra:3.11.2
+    image: docker.repos.balad.ir/cassandra:3.11.2
     depends_on:
       cassandra1:
         condition: service_healthy
