@@ -8,6 +8,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_SERVERS: zoo1:2888:3888;zoo2:2888:3888;zoo3:2888:3888
+    networks:
+      - cassandra_net
 
   zoo2:
     image: docker.repos.balad.ir/confluentinc/cp-zookeeper:7.2.0
@@ -17,6 +19,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2182
       ZOOKEEPER_SERVER_ID: 2
       ZOOKEEPER_SERVERS: zoo1:2888:3888;zoo2:2888:3888;zoo3:2888:3888
+    networks:
+      - cassandra_net
 
   zoo3:
     image: docker.repos.balad.ir/confluentinc/cp-zookeeper:7.2.0
@@ -26,13 +30,17 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2183
       ZOOKEEPER_SERVER_ID: 3
       ZOOKEEPER_SERVERS: zoo1:2888:3888;zoo2:2888:3888;zoo3:2888:3888
-
+    networks:
+      - cassandra_net
 
   kafka1:
     image: docker.repos.balad.ir/confluentinc/cp-kafka:7.2.0
     ports:
       - "9092:9092"
       - "29092:29092"
+    networks:
+      - influx
+      - cassandra_net
     environment:
 #      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:19092,EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092,DOCKER://host.docker.internal:29092
 #      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
@@ -48,6 +56,7 @@ services:
       - zoo1
       - zoo2
       - zoo3
+
   kafka2:
     image: docker.repos.balad.ir/confluentinc/cp-kafka:7.2.0
     ports:
@@ -68,6 +77,9 @@ services:
       - zoo1
       - zoo2
       - zoo3
+    networks:
+      - influx
+      - cassandra_net
 
   kafka3:
     image: docker.repos.balad.ir/confluentinc/cp-kafka:7.2.0
@@ -89,6 +101,10 @@ services:
       - zoo1
       - zoo2
       - zoo3
+    networks:
+      - influx
+      - cassandra_net
+
   kafka-connect:
     build: .
     depends_on:
@@ -121,8 +137,35 @@ services:
       CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_ZOOKEEPER_CONNECT: "zoo1:2181,zoo2:2182,zoo3:2183"
 #      CONNECT_PLUGIN_PATH: /usr/share/java
+    networks:
+      - influx
+      - cassandra_net
+
+# adding this breaks the system
+  # schema-registry:
+  #   image: confluentinc/cp-schema-registry:5.4.0
+  #   hostname: schema-registry
+  #   container_name: schema-registry
+  #   depends_on:
+  #     - zoo1
+  #     - zoo2
+  #     - zoo3
+  #     # - broker
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
+  #     SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zoo1:2181"
+    
+  #   networks:
+  #     - influx
+  #     - cassandra_net
+
 
 networks:
-  default:
+  influx:
+    name: monitoring_network
+    external: true
+  cassandra_net:
     name: cassandra_out_net
     external: true
