@@ -1,28 +1,32 @@
-CREATE KEYSPACE IF NOT EXISTS tfidf
+CREATE KEYSPACE IF NOT EXISTS myorg
             WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
 
-CREATE TABLE IF NOT EXISTS tfidf.tf
+CREATE TABLE IF NOT EXISTS myorg.online_users
 (
-    word     text,
-    document text,
-    tf       int,
-    PRIMARY KEY ((word, document), tf)
+    event_time  time,
+    event_date date,
+    user_id  text,
+    PRIMARY KEY (event_date, event_time, user_id)
 )
-    WITH comment = 'Find tf of the word in a document' AND CLUSTERING ORDER BY (tf DESC);
+    WITH comment = 'Find number of online users in a given date and time' AND CLUSTERING ORDER BY (event_time DESC);
 
-CREATE TABLE IF NOT EXISTS tfidf.df
+CREATE TABLE IF NOT EXISTS myorg.online_users_by_course_time
 (
-    word text,
-    df   int,
-    PRIMARY KEY ((word), df)
+    event_time  time,
+    event_date date,
+    user_id  text,
+    PRIMARY KEY ((course_id, event_date), event_time, user_id)
 )
-            WITH comment = 'Find df of the word' AND CLUSTERING ORDER BY (df DESC);
+    WITH comment = 'Find number of online users in a given date and time and course' AND CLUSTERING ORDER BY (event_time ASC);
 
-CREATE TABLE IF NOT EXISTS tfidf.config
+
+CREATE TABLE IF NOT EXISTS myorg.click_by_place
 (
-    id             int,
+    click_place text,
+    click_date date,
+    click_time time, 
     totalDocuments int,
-    PRIMARY KEY ((id), totalDocuments)
+    PRIMARY KEY ((click_place, click_date), click_time)
 )
-    WITH comment = 'A one row table to store totalDocuments after each stream'
-     AND CLUSTERING ORDER BY (totalDocuments DESC);
+    WITH comment = 'table for finding number of clicks per click place in a given time'
+     AND CLUSTERING ORDER BY (click_time ASC);
