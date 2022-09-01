@@ -16,7 +16,7 @@
 
 <!-- Site specific YARN configuration properties -->
 
-<property><name>yarn.resourcemanager.fs.state-store.uri</name><value>/rmstate</value></property>
+<!-- <property><name>yarn.resourcemanager.fs.state-store.uri</name><value>/rmstate</value></property>
 <property><name>yarn.timeline-service.generic-application-history.enabled</name><value>true</value></property>
 <property><name>mapreduce.map.output.compress</name><value>true</value></property>
 <property><name>yarn.resourcemanager.recovery.enabled</name><value>true</value></property>
@@ -140,17 +140,17 @@
 <property><name>yarn.scheduler.capacity.root.default.maximum-allocation-vcores</name><value>4</value></property>
 <property><name>yarn.timeline-service.hostname</name><value>historyserver</value></property>
 <property><name>yarn.scheduler.capacity.root.default.maximum-allocation-mb</name><value>8192</value></property>
-<property><name>yarn.log.server.url</name><value>http://historyserver:8188/applicationhistory/logs/</value></property>
-<property><name>yarn.resourcemanager.scheduler.class</name><value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value></property>
-<property><name>yarn.resourcemanager.scheduler.address</name><value>resourcemanager:8030</value></property>
+<property><name>yarn.log.server.url</name><value>http://historyserver:8188/applicationhistory/logs/</value></property> -->
+<!-- <property><name>yarn.resourcemanager.scheduler.class</name><value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value></property> -->
+<!-- <property><name>yarn.resourcemanager.scheduler.address</name><value>resourcemanager:8030</value></property> -->
 <property><name>yarn.resourcemanager.address</name><value>resourcemanager:8032</value></property>
 <property><name>yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage</name><value>98.5</value></property>
 <property><name>yarn.nodemanager.resource.memory-mb</name><value>16384</value></property>
 <property><name>yarn.nodemanager.resource.cpu-vcores</name><value>8</value></property>
-<property><name>yarn.resourcemanager.bind-host</name><value>0.0.0.0</value></property>
+<!-- <property><name>yarn.resourcemanager.bind-host</name><value>0.0.0.0</value></property>
 <property><name>yarn.nodemanager.bind-host</name><value>0.0.0.0</value></property>
 <property><name>yarn.nodemanager.bind-host</name><value>0.0.0.0</value></property>
-<property><name>yarn.timeline-service.bind-host</name><value>0.0.0.0</value></property>
+<property><name>yarn.timeline-service.bind-host</name><value>0.0.0.0</value></property> -->
 <property><name>yarn.resourcemanager.fs.state-store.uri</name><value>/rmstate</value></property>
 <property><name>yarn.timeline-service.generic-application-history.enabled</name><value>true</value></property>
 <property><name>mapreduce.map.output.compress</name><value>true</value></property>
@@ -174,8 +174,8 @@
 <property><name>yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage</name><value>98.5</value></property>
 <property><name>yarn.nodemanager.resource.memory-mb</name><value>16384</value></property>
 <property><name>yarn.nodemanager.resource.cpu-vcores</name><value>8</value></property>
-<property><name>yarn.resourcemanager.bind-host</name><value>0.0.0.0</value></property>
+<!-- <property><name>yarn.resourcemanager.bind-host</name><value>0.0.0.0</value></property>
 <property><name>yarn.nodemanager.bind-host</name><value>0.0.0.0</value></property>
 <property><name>yarn.nodemanager.bind-host</name><value>0.0.0.0</value></property>
-<property><name>yarn.timeline-service.bind-host</name><value>0.0.0.0</value></property>
+<property><name>yarn.timeline-service.bind-host</name><value>0.0.0.0</value></property> -->
 </configuration>

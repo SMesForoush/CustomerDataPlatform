@@ -1,0 +1,25 @@
+{
+  "name": "hdfs.sink.kafka-connect",
+  "config": {
+    "connector.class": "io.confluent.connect.hdfs.HdfsSinkConnector",
+    "tasks.max":"4",
+    "topics":"test",
+    "locale":"ENGLISH",
+    "timezone":"UTC",
+    "store.url": "hdfs://namenode:9000",
+    "hdfs.url": "hdfs://namenode:9000",
+    "hadoop.conf.dir": "/etc/hadoop_conf",
+    "hadoop.home": "/opt/hadoop-2.7.4",
+    "logs.dir": "/logs/cdp_records",
+    "format.class": "io.confluent.connect.hdfs.json.JsonFormat",
+    "key.converter.schemas.enable": "false",
+    "value.converter.schemas.enable": "false",
+    "flush.size": "30",
+    "topics.dir": "/data/cdp_records/",
+    "partitioner.class": "io.confluent.connect.storage.partitioner.DefaultPartitioner",
+    "partition.duration.ms": "3600000",
+    "path.format": "YYYY/MM/dd/HH",
+    "timestamp.extractor":"RecordField",
+    "timestamp.field":"timestamp"
+  }
+}
