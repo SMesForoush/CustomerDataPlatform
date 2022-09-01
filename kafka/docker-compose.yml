@@ -101,7 +101,7 @@ services:
     ports:
       - "8083:8083"
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: 'kafka1:9092,kafka2:9093,kafka3:9094'
+      CONNECT_BOOTSTRAP_SERVERS: 'kafka1:29092,kafka2:29093,kafka3:29094'
       CONNECT_REST_ADVERTISED_HOST_NAME: datastax-connect
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: datastax-connect-group
