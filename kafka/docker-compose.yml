@@ -141,27 +141,6 @@ services:
       - influx
       - cassandra_net
 
-# adding this breaks the system
-  # schema-registry:
-  #   image: confluentinc/cp-schema-registry:5.4.0
-  #   hostname: schema-registry
-  #   container_name: schema-registry
-  #   depends_on:
-  #     - zoo1
-  #     - zoo2
-  #     - zoo3
-  #     # - broker
-  #   ports:
-  #     - "8081:8081"
-  #   environment:
-  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
-  #     SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zoo1:2181"
-    
-  #   networks:
-  #     - influx
-  #     - cassandra_net
-
-
 networks:
   influx:
     name: monitoring_network

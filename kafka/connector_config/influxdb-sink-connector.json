@@ -6,8 +6,6 @@
       "topics" : "orders",
       "influxdb.url" : "http://influxdb:8086",
       "influxdb.db" : "influxTestDB",
-      "measurement.name.format" : "${topic}",
-      "value.converter": "io.confluent.connect.avro.AvroConverter",
-      "value.converter.schema.registry.url": "http://schema-registry:8081"
+      "measurement.name.format" : "${topic}"
     }
   }
