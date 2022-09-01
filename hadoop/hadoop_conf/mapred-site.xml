@@ -26,5 +26,5 @@
 <property><name>mapreduce.reduce.java.opts</name><value>-Xmx6144m</value></property>
 <property><name>mapreduce.reduce.memory.mb</name><value>8192</value></property>
 <property><name>mapreduce.map.memory.mb</name><value>4096</value></property>
-<property><name>yarn.nodemanager.bind-host</name><value>0.0.0.0</value></property>
+<!-- <property><name>yarn.nodemanager.bind-host</name><value>0.0.0.0</value></property> -->
 </configuration>
