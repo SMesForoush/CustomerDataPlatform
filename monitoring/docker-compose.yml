@@ -13,6 +13,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=project_admin
       - GF_SECURITY_ADMIN_PASSWORD=sample_pass
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      # - GF_SECURITY_COOKIE_SAMESITE=disabled
     #   - GF_RENDERING_SERVER_URL=http://renderer:8081/render
     #   - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
     #   - GF_LOG_FILTERS=rendering:debug

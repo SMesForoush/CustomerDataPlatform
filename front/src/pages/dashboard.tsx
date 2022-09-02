@@ -11,6 +11,7 @@ import { SchemaOf } from 'yup';
 import * as yup from 'yup';
 import ErrorPage from '../components/ErrorPage';
 import { Dashboard } from '../components/dashboard';
+import WithAuth from '../components/WithAuth';
 
 interface IProps {
   action: string;
@@ -34,13 +35,15 @@ const schema: SchemaOf<LoginInput> = yup.object().shape({
 });
 
 function Home(props: IProps) {
-  const [authState] = useAuth();
-
   return (
     <PageContent>
       <div className="flex flex-col mx-auto">
-        {!authState && <ErrorPage message="Login Required Page" />}
-        {authState && <Dashboard />}
+        <WithAuth withAuth={false}>
+          <ErrorPage message="Login Required Page" />
+        </WithAuth>
+        <WithAuth >
+          <Dashboard />
+        </WithAuth>
       </div>
     </PageContent>
   );
