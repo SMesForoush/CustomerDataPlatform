@@ -1,0 +1,85 @@
+asource.yamlYAML
+# config file version
+apiVersion: 1
+ 
+datasources:
+  - name: 'example'  #<string, required> name of the datasource
+    type: 'postgres'  #<string, required> datasource type
+    access: 'proxy' #<string, required> access mode
+    uid: 'my_unique_uid'  #<string> custom UID, can be used to reference this datasource in other parts of the config
+    url: postgres_db:5432
+    user: 'postgres'  #<string> database user, if used
+    database: 'example'  #<string> database name, if used
+    basicAuth: true #<bool> enable/disable basic auth
+    basicAuthUser: 'admin'  #<string> basic auth username
+    withCredentials: false  #<bool> enable/disable with credentials headers
+    isDefault: true #<bool> mark as default datasource
+ 
+    # <map> fields that will be converted to json and stored in jsonData
+    jsonData:
+      postgreSQLVersion: '9.3'
+      tlsAuth: true
+      tlsAuthWithCACert: true
+      sslmode: "disable"
+    # <string> json object of data that will be encrypted.
+    secureJsonData:
+      password: 'postgres'  #<string> database password, if used
+      basicAuthPassword: 'admin'  #<string> basic auth password
+    version: 1
+    editable: true #<bool> allow users to edit datasources from the UI
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+# config file version
+apiVersion: 1
+ 
+datasources:
+  - name: 'example'  #<string, required> name of the datasource
+    type: 'postgres'  #<string, required> datasource type
+    access: 'proxy' #<string, required> access mode
+    uid: 'my_unique_uid'  #<string> custom UID, can be used to reference this datasource in other parts of the config
+    url: postgres_db:5432
+    user: 'postgres'  #<string> database user, if used
+    database: 'example'  #<string> database name, if used
+    basicAuth: true #<bool> enable/disable basic auth
+    basicAuthUser: 'admin'  #<string> basic auth username
+    withCredentials: false  #<bool> enable/disable with credentials headers
+    isDefault: true #<bool> mark as default datasource
+ 
+    # <map> fields that will be converted to json and stored in jsonData
+    jsonData:
+      postgreSQLVersion: '9.3'
+      tlsAuth: true
+      tlsAuthWithCACert: true
+      sslmode: "disable"
+    # <string> json object of data that will be encrypted.
+    secureJsonData:
+      password: 'postgres'  #<string> database password, if used
+      basicAuthPassword: 'admin'  #<string> basic auth password
+    version: 1
+    editable: true #<bool> allow users to edit datasources from the UI
