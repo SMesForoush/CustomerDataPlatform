@@ -3,9 +3,7 @@ datasources:
   - name: InfluxDB
     type: influxdb
     access: proxy
-    database: db0
-    user: admin
-    password: admin
+    database: myorg
     url: http://influxdb:8086
     isDefault: true
     editable: true
