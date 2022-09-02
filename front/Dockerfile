@@ -1,11 +1,10 @@
-FROM node:14.4.0-alpine
+FROM node:16.16.0-alpine
 
 WORKDIR /home/app/client
-
-ENV PATH /home/app/client/node_modules/.bin:$PATH
 
 COPY package*.json ./
 RUN npm install
 COPY . .
 
-EXPOSE 3000
+RUN npm run build
+CMD [ "npm", "start" ]

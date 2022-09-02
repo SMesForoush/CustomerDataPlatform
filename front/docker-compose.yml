@@ -1,10 +1,10 @@
 version: "3"
 services:
-  client_dev:
-    build:
-      context: ./client
-      dockerfile: Dockerfile.prod
+  client:
+    build: .
     command: sh -c "npm run start"
     volumes:
-      - ./client:/home/app/client
+      - ./:/home/app/client
       - /home/app/client/node_modules
+    ports:
+      - "3000:3000"

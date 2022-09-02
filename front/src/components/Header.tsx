@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 
 import { ActionType, useAuth } from '../services/Auth.context';
 import JWTService from '../services/JWT.service';
-import isEmpty from '../utils/isEmpty';
 
 interface IProps {}
 
