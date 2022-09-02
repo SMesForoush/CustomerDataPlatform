@@ -5,3 +5,5 @@ docker-compose*
 .gitignore
 README.md
 .vscode
+node_modules
+.next

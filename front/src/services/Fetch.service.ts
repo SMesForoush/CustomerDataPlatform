@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-unfetch';
-
 import Cookies from 'universal-cookie';
 import { authCookieName } from './JWT.service';
 type FetchType = {

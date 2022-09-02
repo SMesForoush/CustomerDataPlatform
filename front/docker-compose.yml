@@ -4,7 +4,12 @@ services:
     build: .
     command: sh -c "npm run start"
     volumes:
-      - ./:/home/app/client
       - /home/app/client/node_modules
     ports:
       - "3000:3000"
+
+
+networks:
+  default:
+    name: app_out_net
+    external: true
