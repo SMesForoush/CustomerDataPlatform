@@ -7,10 +7,13 @@ import play.api.http.HeaderNames
 import play.api.libs.json.Json
 import play.api.mvc._
 
+import redis.clients.jedis.{Jedis, JedisPool}
 import javax.inject._
 
 @Singleton
 class AuthController @Inject()(cc: ControllerComponents, jwtService: JWTService, jwtAction: JWTAction) extends AbstractController(cc) {
+  private val redisSession = new JedisPool("localhost", 6379)
+
   val loginForm: Form[(String, String)] = Form(
     tuple(
       "email" -> text,
@@ -21,11 +24,26 @@ class AuthController @Inject()(cc: ControllerComponents, jwtService: JWTService,
   )
 
   def check(email: String, password: String) = {
-    (email == "admin@admin.com" && password == "1234")
+    try {
+      val jedis: Jedis = redisSession.getResource()
+      val userInfo = jedis.hgetAll(email)
+      userInfo.get("password") == password
+    } catch {
+      case x: Exception => println(x)
+      false
+    }
   }
 
-  //  Implement repository to get user info from db
-  def getData(loginForm: (String, String)) = UserInfo(loginForm._1, "Amir")
+  def getData(loginForm: (String, String)) = {
+    try {
+      val jedis: Jedis = redisSession.getResource()
+      val userInfo = jedis.hgetAll(loginForm._1)
+      UserInfo(loginForm._1, userInfo.get("name"))
+    } catch {
+      case x: Exception => println(x)
+        UserInfo("not_found", "not found")
+    }
+  }
 
   def authenticate = Action { implicit request: Request[AnyContent] =>
     loginForm.bindFromRequest().fold(
