@@ -64,6 +64,7 @@ services:
       - '8086:8086'
     volumes:
       - influxdb-storage:/var/lib/influxdb
+      - ./conf/setup_influxdb.sh:/docker-entrypoint-initdb.d/setup.sh:ro
     environment:
       - INFLUXDB_DB=myorg
       - INFLUXDB_HTTP_AUTH_ENABLED=false
