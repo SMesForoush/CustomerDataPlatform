@@ -89,4 +89,5 @@ services:
   
 networks:
   default:
-    name: monitoring_network
+    name: cassandra_out_net
+    external: true

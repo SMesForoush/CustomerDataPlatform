@@ -1,0 +1,39 @@
+didn't work:
+
+docker-compose exec -it kafka1 bash
+
+
+works:
+
+sudo docker exec -it kafka_kafka1_1 bash
+
+kafka-console-producer --topic test --bootstrap-server kafka1:29092 --property parse.key=true --property key.separator=":"
+>salam:hi
+
+kafka-topics --create --topic orders --bootstrap-server kafka1:29092 --replication-factor 1 --partitions 1
+
+my commands:
+
+sudo docker exec -it monitoring_influxdb_1 influx -username admin -password admin
+use db0;
+SELECT * FROM orders;
+
+
+kafka-console-producer  --bootstrap-server kafka1:29092  --topic orders   --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"f1","type":"string"}]}'
+
+{"f1": "value1"}
+{"f1": "value2"}
+{"f1": "value3"}
+
+
+
+sh scripts/add-new-config-to-kafka-connect.sh connector_config/influxdb-sink-connector.json 8083
+
+
+
+curl -X POST http://localhost:8083/connectors/InfluxDBSinkConnector6/restart
+
+
+sudo docker run --rm -it -p 8000:8000 \
+           -e "CONNECT_URL=http://kafka_kafka-connect_1" \
+           landoop/kafka-connect-ui

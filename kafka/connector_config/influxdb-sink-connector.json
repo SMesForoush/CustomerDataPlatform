@@ -2,10 +2,24 @@
     "name" : "InfluxDBSinkConnector",
     "config" : {
       "connector.class" : "io.confluent.influxdb.InfluxDBSinkConnector",
-      "tasks.max" : "1",
-      "topics" : "orders",
+      "tasks.max" : "3",
+      "topics" : "test",
       "influxdb.url" : "http://influxdb:8086",
-      "influxdb.db" : "influxTestDB",
-      "measurement.name.format" : "${topic}"
+      "influxdb.db" : "db0",
+      "measurement.name.format" : "${topic}",
+      "influxdb.password": "admin",
+      "influxdb.username": "admin",
+      "influxdb.gzip.enable" : false,
+      "event.time.fieldname": "timestamp",
+      "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+      "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+      "key.converter.schemas.enable": false,
+      "value.converter.schemas.enable": false,
+      "influxdb.log.level": "FULL",
+      "confluent.topic.bootstrap.servers": "kafka1:29092",
+      "errors.tolerance": "all",
+      "errors.deadletterqueue.topic.name": "dlq-sink",
+      "errors.deadletterqueue.context.headers.enable": true,
+      "connect.progress.enabled": true
     }
   }
