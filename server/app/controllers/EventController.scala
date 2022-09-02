@@ -43,8 +43,6 @@ class EventController @Inject()(cc: ControllerComponents) extends AbstractContro
       //    println(jso)
       Ok("created")
     }
-
-
   }
 }
 

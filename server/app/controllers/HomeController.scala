@@ -47,4 +47,8 @@ class HomeController @Inject()(
     Ok(res)
   }
 
+  def sampleQuery() = Action { implicit request: Request[AnyContent] =>
+    Ok("Hello, your result is " + dfRepo.getDfByWord("hello"))
+  }
+
 }

@@ -1,0 +1,10 @@
+
+### live
+
+# online users of last hour
+GET         /online-users           controllers.analytics.QueryController.getOnlineUsers()
+
+GET         /click-by-place/:place  controllers.analytics.QueryController.getClickByPlace(place)
+
+### batch
+GET         /online-users-by-course-time  controllers.analytics.QueryController.getOnlineUsersByCourseTime()
