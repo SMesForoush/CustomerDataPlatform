@@ -8,7 +8,7 @@ import NavService from '../services/Nav.service';
 type ValidateAuthResponce = {
   success: true;
 };
-export const authCookieName = process.env.AUTH_COOKIE_NAME;
+export const authCookieName = process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME;
 class TokenService {
   public saveToken(token: string) {
     const cookies = new Cookies();
@@ -22,10 +22,14 @@ class TokenService {
     return;
   }
 
-  public checkAuthToken(token: string): Promise<ValidateAuthResponce | null> {
+  public checkAuthToken(token: string, ssr: boolean): Promise<ValidateAuthResponce | null> {
     return FetchService.isofetchAuthed<ValidateAuthResponce>({
       url: `/auth/validate`,
-      type: 'POST'
+      type: 'POST',
+      headers: {
+        [authCookieName]: token,
+      },
+      ssr,
     });
   }
 
@@ -33,8 +37,7 @@ class TokenService {
     const ssr = ctx.req ? true : false;
     const cookies = new Cookies(ssr ? ctx.req?.headers.cookie : null);
     const token = cookies.get(authCookieName);
-
-    const response = await this.checkAuthToken(token);
+    const response = await this.checkAuthToken(token, ssr);
     if (!response?.success) {
       const navService = new NavService();
       this.deleteToken();
