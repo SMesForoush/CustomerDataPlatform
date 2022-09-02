@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import { ActionType, useAuth } from '../services/Auth.context';
 import JWTService from '../services/JWT.service';
+import Link from 'next/link';
 
 interface IProps {}
 
@@ -26,12 +27,19 @@ function Header(props: IProps) {
           <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         </Head>
         {auth ? (
-          <div className="text-right">
-            <p>Logged in with user: {auth.email}</p>
-            <button className="text-blue-800" onClick={onLogOut}>
-              Log out
-            </button>
-          </div>
+          <>
+            <div className="text-right">
+              <p>Logged in with user: {auth.email}</p>
+              <button className="text-blue-800" onClick={onLogOut}>
+                Log out
+              </button>
+            </div>
+            <div className="text-left">
+              <Link href="/dashboard">
+                <a>Dashboard</a>
+              </Link>
+            </div>
+          </>
         ) : null}
         <h1 className="text-3xl">Customer Data Platform</h1>
       </div>
