@@ -1,0 +1,1 @@
+influx -execute "CREATE RETENTION POLICY one_day_only ON myorg DURATION 1h REPLICATION 1 DEFAULT"

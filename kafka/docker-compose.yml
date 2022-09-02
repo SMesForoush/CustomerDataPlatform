@@ -27,7 +27,6 @@ services:
       ZOOKEEPER_SERVER_ID: 3
       ZOOKEEPER_SERVERS: zoo1:2888:3888;zoo2:2888:3888;zoo3:2888:3888
 
-
   kafka1:
     image: docker.repos.balad.ir/confluentinc/cp-kafka:7.2.0
     ports:
@@ -48,6 +47,7 @@ services:
       - zoo1
       - zoo2
       - zoo3
+
   kafka2:
     image: docker.repos.balad.ir/confluentinc/cp-kafka:7.2.0
     ports:
@@ -89,6 +89,7 @@ services:
       - zoo1
       - zoo2
       - zoo3
+
   kafka-connect:
     build: .
     depends_on:

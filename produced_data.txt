@@ -1,0 +1,2 @@
+{"name":"influx","age":23,"tags":{"id":"5"},"timestamp":235}
+{"name":"jim", "age":24,"tags":{"id":"5"},"timestamp":236}
