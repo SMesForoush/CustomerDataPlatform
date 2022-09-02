@@ -1,0 +1,7 @@
+node_modules/
+.next
+.env
+build/
+db/data/
+db/data-test/
+.DS_Store
