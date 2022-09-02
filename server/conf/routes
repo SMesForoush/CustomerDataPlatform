@@ -6,7 +6,7 @@
 
 # An example controller showing a sample home page
 
-->          /api                 auth.Routes
+->          /auth                 auth.Routes
 
 GET         /                    controllers.HomeController.index()
 GET         /explore             controllers.HomeController.explore()
