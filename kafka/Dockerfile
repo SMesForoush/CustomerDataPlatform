@@ -5,5 +5,5 @@ RUN tar xzf kafka-connect-cassandra-sink.tar.gz -C datastax-connector --strip-co
 RUN mkdir -p /usr/share/java/kafka-connect-cassandra/
 RUN mv datastax-connector/kafka-connect* /usr/share/java/kafka-connect-cassandra/
 RUN confluent-hub install --no-prompt confluentinc/kafka-connect-hdfs:10.1.12
-
+RUN confluent-hub install --no-prompt confluentinc/connect-transforms:latest
 RUN confluent-hub install --no-prompt confluentinc/kafka-connect-influxdb:latest
