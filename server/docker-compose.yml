@@ -1,0 +1,19 @@
+version: "3"
+services:
+  server:
+    build: .
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./:/home/app/server
+      - /home/app/server/target
+      - /home/app/server/project
+    networks:
+      - cassandra
+      - app
+
+networks:
+  app:
+    name: app_out_net
+  cassandra:
+    name: cassandra_app_out_net

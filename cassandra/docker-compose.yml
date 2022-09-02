@@ -21,6 +21,9 @@ services:
       # Therefore, memory options are mandatory if multiple Cassandras are launched in the same node.
       - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=200M
+    networks:
+      - server
+      - cassandra
   cassandra2:
     image: docker.repos.balad.ir/cassandra:3.11.2
     ports:
@@ -41,6 +44,9 @@ services:
       # Therefore, memory options are mandatory if multiple Cassandras are launched in the same node.
       - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=200M
+    networks:
+      - server
+      - cassandra
 
   cassandra-load-keyspace:
     image: docker.repos.balad.ir/cassandra:3.11.2
@@ -52,7 +58,9 @@ services:
     volumes:
       - ./schema.cql:/scripts/schema.cql
     command: /bin/bash -c "cqlsh -u cassandra -p cassandra -f /scripts/schema.cql cassandra1"
-    
+    networks:
+      - cassandra
+
 volumes:
   cassandra_data2:
   cassandra_data1:
@@ -60,5 +68,8 @@ volumes:
   cassandra_log2:
 
 networks:
-  default:
+  cassandra:
     name: cassandra_out_net
+  server:
+    name: cassandra_app_out_net
+    external: true
