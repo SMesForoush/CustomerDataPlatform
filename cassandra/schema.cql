@@ -22,11 +22,12 @@ CREATE TABLE IF NOT EXISTS myorg.online_users_by_course_time
 
 CREATE TABLE IF NOT EXISTS myorg.click_by_place
 (
-    click_place text,
-    click_date date,
-    click_time time, 
-    totalDocuments int,
-    PRIMARY KEY ((click_place, click_date), click_time)
+    event_place text,
+    event_date date,
+    event_time time, 
+    event_type text,
+    session_id text,
+    PRIMARY KEY ((event_place, event_date), event_time, session_id)
 )
     WITH comment = 'table for finding number of clicks per click place in a given time'
-     AND CLUSTERING ORDER BY (click_time ASC);
+     AND CLUSTERING ORDER BY (event_time ASC);

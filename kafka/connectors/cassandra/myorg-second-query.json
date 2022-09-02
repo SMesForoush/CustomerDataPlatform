@@ -1,0 +1,18 @@
+{
+  "name": "cassandra-connector-myorg-second-query",
+  "config": {
+    "connector.class": "com.datastax.oss.kafka.sink.CassandraSinkConnector",
+    "tasks.max": "10",
+    "topics": "myorg_topic",
+    "contactPoints": "cassandra1,cassandra2",
+    "port": "9042",
+    "maxNumberOfRecordsInBatch": "10",
+    "loadBalancing.localDc": "datacenter1",
+    "topic.myorg_topic.myorg.online_users_by_course_time.mapping": "event_time=value.event_time, event_date=value.event_date, user_id=value.user_id, course_id=value.course_id",
+    "topic.myorg_topic.myorg.online_users_by_course_time.consistencyLevel": "LOCAL_QUORUM",
+    "topic.myorg_topic.myorg.online_users_by_course_time.deletesEnabled": false,
+    "auth.provider":"PLAIN",
+    "auth.username":"cassandra",
+    "auth.password":"cassandra"
+  }
+}
