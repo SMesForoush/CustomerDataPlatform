@@ -1,0 +1,54 @@
+version: "3"
+services:
+      
+  namenode:
+    image: docker.repos.balad.ir/bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    ports:
+      - 50070:50070
+      - 9000:9000
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+      - ./hadoop_conf:/etc/hadoop_conf
+    environment:
+      - CLUSTER_NAME=test
+      - HADOOP_CONF_DIR=/etc/hadoop_conf
+
+
+  datanode1:
+    image: docker.repos.balad.ir/bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+      - ./hadoop_conf:/etc/hadoop_conf
+    environment:
+      #- SERVICE_PRECONDITION= "namenode:50070"
+      - HADOOP_CONF_DIR=/etc/hadoop_conf
+    depends_on:
+      - namenode  
+    
+  
+  datanode2:
+    image: docker.repos.balad.ir/bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+      - ./hadoop_conf:/etc/hadoop_conf
+    environment:
+      #- SERVICE_PRECONDITION= "namenode:50070"
+      - HADOOP_CONF_DIR=/etc/hadoop_conf
+    depends_on:
+      - namenode 
+
+  datanode3:
+    image: docker.repos.balad.ir/bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+      - ./hadoop_conf:/etc/hadoop_conf
+    environment:
+      #- SERVICE_PRECONDITION= "namenode:50070"
+      - HADOOP_CONF_DIR=/etc/hadoop_conf
+    depends_on:
+      - namenode   
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+

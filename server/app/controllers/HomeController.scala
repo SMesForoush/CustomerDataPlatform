@@ -1,5 +1,6 @@
 package controllers
 
+import cassandra.DfRepo
 import jwt.{JWTAction, LoginRequiredAction, UserRequest}
 import play.api._
 import play.api.mvc._
@@ -7,7 +8,13 @@ import play.api.mvc._
 import javax.inject._
 
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents, config: Configuration, jwtAction: JWTAction, loginRequiredAction: LoginRequiredAction) extends AbstractController(cc) {
+class HomeController @Inject()(
+                                cc: ControllerComponents,
+                                config: Configuration,
+                                jwtAction: JWTAction,
+                                loginRequiredAction: LoginRequiredAction,
+                                dfRepo: DfRepo
+                              ) extends AbstractController(cc) {
 
   def index() = jwtAction { implicit request: UserRequest[AnyContent] =>
     val username = request.user map {
@@ -21,6 +28,10 @@ class HomeController @Inject()(cc: ControllerComponents, config: Configuration, 
   }
 
   def tutorial() = Action { implicit request: Request[AnyContent] =>
+    val start = System.nanoTime
+    println(dfRepo.getDfByWord("hello"))
+    val end = System.nanoTime
+    println((end - start) / 1000)
     Ok(views.html.tutorial())
   }
 

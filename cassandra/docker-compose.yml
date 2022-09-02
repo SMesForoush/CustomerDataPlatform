@@ -11,8 +11,8 @@ services:
       timeout: 10s
       retries: 10
     volumes:
-      - ./data/cassandra1:/var/lib/cassandra
-      - ./logs/cassandra1:/var/log/cassandra
+      - cassandra_data1:/var/lib/cassandra
+      - cassandra_log1:/var/log/cassandra
     environment:
       - CASSANDRA_SEEDS=cassandra1,cassandra2
       - CASSANDRA_PASSWORD_SEEDER=yes
@@ -32,9 +32,8 @@ services:
       timeout: 10s
       retries: 10
     volumes:
-      - ./data/cassandra2:/var/lib/cassandra
-      - ./logs/cassandra2:/var/log/cassandra
-      - ./schema.cql:/scripts/schema.cql
+      - cassandra_data2:/var/lib/cassandra
+      - cassandra_log2:/var/log/cassandra
     environment:
       - CASSANDRA_SEEDS=cassandra1,cassandra2
       - CASSANDRA_PASSWORD=cassandra
@@ -53,6 +52,12 @@ services:
     volumes:
       - ./schema.cql:/scripts/schema.cql
     command: /bin/bash -c "cqlsh -u cassandra -p cassandra -f /scripts/schema.cql cassandra1"
+    
+volumes:
+  cassandra_data2:
+  cassandra_data1:
+  cassandra_log1:
+  cassandra_log2:
 
 networks:
   default:
