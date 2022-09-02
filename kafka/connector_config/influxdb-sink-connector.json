@@ -3,12 +3,10 @@
     "config" : {
       "connector.class" : "io.confluent.influxdb.InfluxDBSinkConnector",
       "tasks.max" : "3",
-      "topics" : "test",
+      "topics" : "test2",
       "influxdb.url" : "http://influxdb:8086",
       "influxdb.db" : "db0",
       "measurement.name.format" : "${topic}",
-      "influxdb.password": "admin",
-      "influxdb.username": "admin",
       "influxdb.gzip.enable" : false,
       "event.time.fieldname": "timestamp",
       "key.converter": "org.apache.kafka.connect.storage.StringConverter",

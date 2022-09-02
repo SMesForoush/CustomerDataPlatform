@@ -8,10 +8,6 @@ upinfconf() {
     sh "$CDPK/scripts/add-new-config-to-kafka-connect.sh" "$CDPK/connector_config/influxdb-sink-connector.json" 8083
 }
 
-kafkaproducer() {
-    sudo docker exec -it kafka_kafka1_1 kafka-console-producer  --bootstrap-server kafka1:29092  --topic test 
-}
-
 influxshell() {
     sudo docker exec -it monitoring_influxdb_1 influx -username admin -password admin
 }
@@ -20,8 +16,14 @@ connectlog() {
     sudo docker logs kafka_kafka-connect_1 -f
 }
 
+kafkaproducer() {
+    TOPIC=$1
+    sudo docker exec -it kafka_kafka1_1 kafka-console-producer  --bootstrap-server kafka1:29092  --topic $TOPIC 
+}
+
 kafkaconsumer() {
-    sudo docker exec -it kafka_kafka1_1 kafka-console-consumer --bootstrap-server kafka1:29092  --topic test --from-beginning
+    TOPIC=$1
+    sudo docker exec -it kafka_kafka1_1 kafka-console-consumer --bootstrap-server kafka1:29092  --topic $TOPIC --from-beginning
 }
 
 delinfconf() {
@@ -30,4 +32,8 @@ delinfconf() {
 
 restartinfconf() {
     curl -X POST "http://localhost:8083/connectors/InfluxDBSinkConnector/restart"
+}
+
+restart_influx_connector_task() {
+    curl -X POST "http://localhost:8083/connectors/InfluxDBSinkConnector/tasks/0/restart"
 }
