@@ -23,8 +23,8 @@ type LoginResponce<T extends boolean> = {
   token: T extends true ? undefined : string;
   email: T extends true ? undefined : string;
   name: T extends true ? undefined : string;
-  hasGlobalErrors: T;
-  globalError: T extends true ? string : undefined;
+  hasError: T;
+  errors?: T extends true ? { [key: string]: string } : undefined;
 };
 type LoginInput = {
   email: string;
@@ -39,7 +39,7 @@ const schema: SchemaOf<LoginInput> = yup.object().shape({
 function Home(props: IProps) {
   const tokenService = new TokenService();
   const [authState, authDispatch] = useAuth();
-  const router = useRouter()
+  const router = useRouter();
   // Log user out when they are directed to the /l=t URL - caught in the getInitialProps at the
   // bottom of the page
   React.useEffect(() => {
@@ -66,9 +66,12 @@ function Home(props: IProps) {
     }
   });
   const onLogIn = React.useCallback(async (values: ILoginIn) => {
-    const { token, hasGlobalErrors, globalError, ...userData } = await FetchService.isofetch<
-      LoginResponce<boolean>
-    >({
+    const {
+      token,
+      hasError: hasGlobalErrors,
+      errors,
+      ...userData
+    } = await FetchService.isofetch<LoginResponce<boolean>>({
       url: '/auth/authenticate',
       data: {
         email: values.email,
@@ -86,14 +89,14 @@ function Home(props: IProps) {
         payload: userData
       });
 
-      router.push('/dashboard');
+      // router.push('/dashboard');
     } else {
-      alert(globalError);
+      alert(errors);
     }
   }, []);
   return (
     <PageContent>
-      <div className='flex flex-col mx-auto'>
+      <div className="flex flex-col mx-auto">
         <form onSubmit={handleSubmit(onLogIn)} className="flex flex-col space-y-4">
           <FormInputWithController control={control} name="email" type="email" labelName="Email" />
           <FormInputWithController
@@ -103,7 +106,10 @@ function Home(props: IProps) {
             labelName="password"
           />
 
-          <button type="submit" className='border text-sm text-blue-600 hover:opacity-70 active:scale-90 px-3 py-2 rounded-md border-blue-400'>
+          <button
+            type="submit"
+            className="border text-sm text-blue-600 hover:opacity-70 active:scale-90 px-3 py-2 rounded-md border-blue-400"
+          >
             Submit
           </button>
         </form>
@@ -111,14 +117,14 @@ function Home(props: IProps) {
         <div>
           Click{' '}
           <Link href="/about">
-            <a className='text-blue-400'>here</a>
+            <a className="text-blue-400">here</a>
           </Link>{' '}
           to read more
         </div>
         <div>
           Click{' '}
           <Link href="/register">
-            <a className='text-blue-400'>here</a>
+            <a className="text-blue-400">here</a>
           </Link>{' '}
           to register
         </div>

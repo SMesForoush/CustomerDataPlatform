@@ -26,7 +26,7 @@ function Header(props: IProps) {
           <title>Customer Data Platform</title>
           <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         </Head>
-        {!isEmpty(auth) ? (
+        {auth ? (
           <div className="text-right">
             <p>Logged in with user: {auth.email}</p>
             <button className="text-blue-800" onClick={onLogOut}>

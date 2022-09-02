@@ -29,7 +29,12 @@ class AuthController @Inject()(cc: ControllerComponents, jwtService: JWTService,
 
   def authenticate = Action { implicit request: Request[AnyContent] =>
     loginForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(views.html.login(formWithErrors)),
+      formWithErrors => BadRequest(Json.obj(
+        "errors" -> formWithErrors.errors.map(_.message)
+          .reduce[String](
+            (a: String, b: String) => s"$a , $b"),
+        "hasError" -> true
+      )),
       user => {
         val userData = getData(user)
         val token = jwtService.encodeJWT(userData)

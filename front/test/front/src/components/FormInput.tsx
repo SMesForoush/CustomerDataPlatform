@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { InputHTMLAttributes } from 'react';
 import { Control, useController } from 'react-hook-form';
 
@@ -25,7 +26,7 @@ export function FormInputWithController({
   return (
     <label>
       {labelName && <div>{labelName}</div>}
-      <input className={className} {...field} {...props} />
+      <input className={classNames(className, "bg-blue-50")} {...field} {...props} />
       {errors[props.name]?.message && <div>{errors[props.name]?.message.toString()}</div>}
     </label>
   );

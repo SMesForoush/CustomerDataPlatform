@@ -1,5 +1,5 @@
 
-GET        /login               controllers.auth.AuthController.login()
-GET        /authenticate        controllers.auth.AuthController.authenticate()
-GET        /validate            controllers.auth.AuthController.validate()
-GET        /logout              controllers.auth.AuthController.logout()
+GET         /login               controllers.auth.AuthController.login()
+POST        /authenticate        controllers.auth.AuthController.authenticate()
+POST        /validate            controllers.auth.AuthController.validate()
+GET         /logout              controllers.auth.AuthController.logout()

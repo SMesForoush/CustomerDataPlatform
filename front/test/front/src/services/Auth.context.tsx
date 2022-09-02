@@ -1,4 +1,12 @@
-import React, { Dispatch, Reducer, ReducerAction, ReducerState, useContext, useEffect, useReducer } from 'react';
+import React, {
+  Dispatch,
+  Reducer,
+  ReducerAction,
+  ReducerState,
+  useContext,
+  useEffect,
+  useReducer
+} from 'react';
 
 import { IAuthInfo } from '../types/auth.types';
 
@@ -7,7 +15,6 @@ const initialState: IAuthInfo = undefined;
 type ReducerType = Reducer<undefined | IAuthInfo, IAction>;
 type ContextType = [ReducerState<ReducerType>, Dispatch<ReducerAction<ReducerType>>];
 export const AuthStateContext = React.createContext<ContextType>([undefined, () => undefined]);
-
 
 export enum ActionType {
   SetDetails = 'setAuthDetails',
@@ -27,7 +34,7 @@ const reducer: React.Reducer<IAuthInfo, IAction> = (state, action) => {
         name: action.payload.name
       };
     case ActionType.RemoveDetails:
-      return { ...initialState };
+      return initialState;
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
@@ -35,7 +42,11 @@ const reducer: React.Reducer<IAuthInfo, IAction> = (state, action) => {
 
 export const AuthProvider = ({ children }: any) => {
   let localState = null;
-  if (typeof localStorage !== 'undefined' && localStorage.getItem('userInfo')) {
+  if (
+    typeof localStorage !== 'undefined' &&
+    localStorage.getItem('userInfo') &&
+    localStorage.getItem('userInfo') !== 'undefined'
+  ) {
     localState = JSON.parse(localStorage.getItem('userInfo') || '');
   }
   const [state, dispatch] = useReducer<ReducerType>(reducer, localState || initialState);
