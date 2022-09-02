@@ -14,6 +14,7 @@ lazy val root = (project in file("."))
       "com.datastax.oss" % "java-driver-core" % cassandraVersion,
       "com.datastax.oss" % "java-driver-mapper-runtime" % cassandraVersion,
       "com.datastax.oss" % "java-driver-query-builder" % cassandraVersion,
+      "redis.clients" % "jedis" % "4.2.3",
     ),
     scalacOptions ++= Seq(
       "-feature",
