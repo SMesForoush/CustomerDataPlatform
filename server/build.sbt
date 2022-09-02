@@ -20,5 +20,5 @@ lazy val root = (project in file("."))
       "-deprecation",
       "-Xfatal-warnings"
     ),
-    PlayKeys.playDefaultPort := 99000,
+    PlayKeys.playDefaultPort := 9999,
   )
