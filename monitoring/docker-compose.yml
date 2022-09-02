@@ -57,22 +57,8 @@ services:
       - '--web.config.file=/etc/prometheus/web.yml'
     ports:
       - 9090:9090
-    # networks:
-    #   - monitoring_network
-     
-  # postgres_db:
-  #   image: postgres:13.0
-  #   ports:
-  #     - 5432:5432
-  #   networks:
-  #   - monitoring_network
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGRES_DB: example
 
   influxdb:
-    # image: influxdb:latest
     image: influxdb:1.8.10
     ports:
       - '8086:8086'
@@ -80,6 +66,7 @@ services:
       - influxdb-storage:/var/lib/influxdb
     environment:
       - INFLUXDB_DB=db0
+      # - INFLUXDB_HTTP_AUTH_ENABLED=false
       - INFLUXDB_ADMIN_USER=admin
       - INFLUXDB_ADMIN_PASSWORD=admin
       # - INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME}
