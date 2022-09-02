@@ -55,7 +55,6 @@ function Home(props: IProps) {
   }, []);
 
   const {
-    formState: { errors },
     handleSubmit,
     control
   } = useForm<LoginInput>({
@@ -97,7 +96,7 @@ function Home(props: IProps) {
   return (
     <PageContent>
       <div className="flex flex-col mx-auto">
-        <form onSubmit={handleSubmit(onLogIn)} className="flex flex-col space-y-4">
+        {!authState && <form onSubmit={handleSubmit(onLogIn)} className="flex flex-col space-y-4">
           <FormInputWithController control={control} name="email" type="email" labelName="Email" />
           <FormInputWithController
             control={control}
@@ -112,32 +111,22 @@ function Home(props: IProps) {
           >
             Submit
           </button>
-        </form>
-
-        <div>
-          Click{' '}
-          <Link href="/about">
-            <a className="text-blue-400">here</a>
-          </Link>{' '}
-          to read more
-        </div>
-        <div>
-          Click{' '}
-          <Link href="/register">
-            <a className="text-blue-400">here</a>
-          </Link>{' '}
-          to register
-        </div>
+        </form>}
+    {authState && <p className='text-blue-900'>Loged in successfully.</p>}
       </div>
     </PageContent>
   );
 }
 
 Home.getInitialProps = async (ctx: NextPageContext) => {
-  if (ctx.query && ctx.query.l == 't') {
+  if (ctx.query && ctx.query.l === 't') {
     return { action: 'logout' };
   }
-  return {};
+  const authService = new TokenService()
+  await authService.authenticateTokenSsr(ctx)
+  return {
+    action: undefined
+  };
 };
 
 export default Home;

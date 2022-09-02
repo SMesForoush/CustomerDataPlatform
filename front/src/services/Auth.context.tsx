@@ -5,7 +5,8 @@ import React, {
   ReducerState,
   useContext,
   useEffect,
-  useReducer
+  useReducer,
+  useState
 } from 'react';
 
 import { IAuthInfo } from '../types/auth.types';
@@ -61,4 +62,11 @@ export const AuthProvider = ({ children }: any) => {
   );
 };
 
-export const useAuth: () => ContextType = () => useContext(AuthStateContext);
+export const useAuth: () => ContextType = () => {
+  const [firstRender, setFirstRender] = useState(true);
+  useEffect(() => {
+    setFirstRender(false);
+  }, []);
+  const [state, setState] = useContext(AuthStateContext);
+  return firstRender ? [undefined, setState] : [state, setState];
+};

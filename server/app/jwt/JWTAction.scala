@@ -32,12 +32,12 @@ class JWTAction @Inject()(bodyParser: BodyParsers.Default, jwtService: JWTServic
 
 
   def getUserRequest[A](request: Request[A]): Option[UserRequest[A]] = {
-    val cookieToken = request.cookies.get(HeaderNames.AUTHORIZATION)
-    if (cookieToken.isEmpty || cookieToken.get.value.length == 0) {
+    val optionToken = request.headers.get(HeaderNames.AUTHORIZATION)
+    if (optionToken.isEmpty || optionToken.get.length == 0) {
       return Option(UserRequest(Option.empty[UserInfo], Option.empty[String], request))
     }
     //     todo implement expire
-    val token = cookieToken.get.value
+    val token = optionToken.get
     val isValidToken = jwtService.validateJwt(token)
     if (!isValidToken) {
       return Option.empty[UserRequest[A]]
@@ -74,7 +74,7 @@ class LoginRequiredAction @Inject()(bodyParser: BodyParsers.Default, jwtService:
         ),
       ))
     }
-    block (
+    block(
       optionUserRequest.get
     )
   }
