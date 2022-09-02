@@ -2,7 +2,7 @@ import React, { Dispatch, Reducer, ReducerAction, ReducerState, useContext, useE
 
 import { IAuthInfo } from '../types/auth.types';
 
-const initialState: IAuthInfo = { email: '', name: '' };
+const initialState: IAuthInfo = undefined;
 
 type ReducerType = Reducer<undefined | IAuthInfo, IAction>;
 type ContextType = [ReducerState<ReducerType>, Dispatch<ReducerAction<ReducerType>>];

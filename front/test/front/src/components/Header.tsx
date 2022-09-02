@@ -1,26 +1,13 @@
 import Head from 'next/head';
 import * as React from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 import { ActionType, useAuth } from '../services/Auth.context';
 import JWTService from '../services/JWT.service';
+import isEmpty from '../utils/isEmpty';
 
 interface IProps {}
 
-function isEmpty(obj: object) {
-  return Object.entries(obj).reduce(
-    (res, cur) => {
-      if (res) {
-        return res;
-      }
-      if (typeof cur === 'object') {
-        return res || isEmpty(cur);
-      }
-      return res || !cur;
-    },
-    [false]
-  );
-}
 function Header(props: IProps) {
   const tokenService = new JWTService();
   const [auth, authDispatch] = useAuth();
