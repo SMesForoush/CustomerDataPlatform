@@ -1,15 +1,16 @@
 package controllers.auth
 
-import jwt.{JWTService, UserInfo}
+import jwt.{JWTAction, JWTService, UserInfo, UserRequest}
 import play.api.data.Forms._
 import play.api.data._
 import play.api.http.HeaderNames
+import play.api.libs.json.Json
 import play.api.mvc._
 
 import javax.inject._
 
 @Singleton
-class AuthController @Inject()(cc: ControllerComponents, jwtService: JWTService) extends AbstractController(cc) {
+class AuthController @Inject()(cc: ControllerComponents, jwtService: JWTService, jwtAction: JWTAction) extends AbstractController(cc) {
   val loginForm: Form[(String, String)] = Form(
     tuple(
       "email" -> text,
@@ -28,10 +29,20 @@ class AuthController @Inject()(cc: ControllerComponents, jwtService: JWTService)
 
   def authenticate = Action { implicit request: Request[AnyContent] =>
     loginForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(views.html.login(formWithErrors)),
+      formWithErrors => BadRequest(Json.obj(
+        "errors" -> formWithErrors.errors.map(_.message)
+          .reduce[String](
+            (a: String, b: String) => s"$a , $b"),
+        "hasError" -> true
+      )),
       user => {
-        val token = jwtService.encodeJWT(getData(user))
-        Redirect("/").withHeaders(
+        val userData = getData(user)
+        val token = jwtService.encodeJWT(userData)
+        Ok(Json.obj
+        ("token" -> token,
+          "email" -> userData.email,
+          "name" -> userData.name
+        )).withHeaders(
           (
             HeaderNames.SET_COOKIE,
             s"${HeaderNames.AUTHORIZATION}=${token}"
@@ -43,6 +54,16 @@ class AuthController @Inject()(cc: ControllerComponents, jwtService: JWTService)
         )
       }
     )
+  }
+
+  def validate = jwtAction { implicit request: UserRequest[AnyContent] =>
+    val success = request.user match {
+      case None => false
+      case _ => true
+    };
+    Ok(Json.obj(
+      "success" -> success
+    ))
   }
 
   def login = Action { implicit request: Request[AnyContent] =>

@@ -3,6 +3,7 @@ package controllers
 import cassandra.DfRepo
 import jwt.{JWTAction, LoginRequiredAction, UserRequest}
 import play.api._
+import play.api.libs.json.Json
 import play.api.mvc._
 
 import javax.inject._
@@ -36,7 +37,14 @@ class HomeController @Inject()(
   }
 
   def hello(name: String) = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.hello(name))
+    val res = Json.obj(
+      "sessionId" -> "session",
+      "userId" -> name,
+      "courseId" -> "wow",
+      "createdAt" -> "be to che",
+    )
+    //    Ok(views.html.hello(name))
+    Ok(res)
   }
 
 }
