@@ -1,19 +1,19 @@
 import classNames from 'classnames';
 import { InputHTMLAttributes } from 'react';
-import { Control, useController } from 'react-hook-form';
+import { Control, ControllerRenderProps, useController } from 'react-hook-form';
 
 export type FormInputWithControllerProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
   control: Control<any>;
-  kind?: 'input' | 'textarea';
   labelName?: string;
+  render?: (field: ControllerRenderProps) => JSX.Element
 };
 
 export function FormInputWithController({
   className = '',
-  kind = 'input',
   control,
   labelName = '',
+  render,
   ...props
 }: FormInputWithControllerProps): JSX.Element {
   const {
@@ -26,7 +26,8 @@ export function FormInputWithController({
   return (
     <label>
       {labelName && <div>{labelName}</div>}
-      <input className={classNames(className, "bg-blue-50")} {...field} {...props} />
+      {render && render(field)}
+      {!render && <input className={classNames(className, "bg-blue-50")} {...field} {...props} />}
       {errors[props.name]?.message && <div>{errors[props.name]?.message.toString()}</div>}
     </label>
   );
