@@ -8,7 +8,7 @@ volumes:
 
 services:
   grafana:
-    image: grafana/grafana
+    image: docker.repos.balad.ir/grafana/grafana
     restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_USER=project_admin
@@ -31,30 +31,8 @@ services:
       - renderer
       - influxdb
 
-  renderer:
-    image: grafana/grafana-image-renderer:latest
-    ports:
-      - 8081
-    environment:
-      ENABLE_METRICS: 'true'
-
-  prometheus:
-    image: prom/prometheus
-    restart: unless-stopped
-    user: root
-    volumes:
-      - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./conf/web.yml:/etc/prometheus/web.yml
-      - prometheus_data:/data
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/data'
-      - '--web.config.file=/etc/prometheus/web.yml'
-    ports:
-      - 9090:9090
-
   influxdb:
-    image: influxdb:1.8.10
+    image: docker.repos.balad.ir/influxdb:1.8.10
     ports:
       - '8086:8086'
     volumes:
