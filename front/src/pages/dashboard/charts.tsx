@@ -25,6 +25,8 @@ import ClicksOnEvent from '../../components/query/ClicksOnEvent';
 import OnlineUser from '../../components/query/OnlineUsers';
 import VideoPlays from '../../components/query/VideoPlays';
 import OnlineUsersForCource from '../../components/query/OnlineUsersForCourse';
+import WithAuth from '../../components/WithAuth';
+import ErrorPage from '../../components/ErrorPage';
 
 ChartJS.register(
     CategoryScale,
@@ -90,25 +92,31 @@ function Home(props: IProps) {
     const Component = QueryTypeMapperComponent[watchType]
     return (
         <PageContent>
-            <form className="flex flex-col space-y-4">
 
-                <FormInputWithController name='startDate' labelName='Start Date' control={control} type="datetime-local" />
-                {watchStartDate && <FormInputWithController name='endDate' labelName='End Date' control={control} type="datetime-local" />}
-                {watchEndDate && <FormInputWithController name='type' labelName='Query Type' control={control} render={(field) => {
-                    return (
-                        <select {...field}>
-                            <option key={""} value="">not selected</option>
-                            {Object.values(QueryType).map(value => {
-                                return <option key={value} value={value}>{value}</option>
-                            })}
-                        </select>
-                    )
-                }} />}
-                {watchType && Component && <Component startDate={watchStartDate} endDate={watchEndDate} />}
+            <WithAuth withAuth={false}>
+                <ErrorPage message="Login Required Page" />
+            </WithAuth>
+            <WithAuth>
+                <>
+                    <h2>Complete Form To See Charts.</h2>
+                    <form className="flex flex-col space-y-4">
 
-            </form>
-
-            <LineChart data={data} labels={labels} />;
+                        <FormInputWithController name='startDate' labelName='Start Date' control={control} type="datetime-local" />
+                        {watchStartDate && <FormInputWithController name='endDate' labelName='End Date' control={control} type="datetime-local" />}
+                        {watchEndDate && <FormInputWithController name='type' labelName='Query Type' control={control} render={(field) => {
+                            return (
+                                <select {...field}>
+                                    <option key={""} value="">not selected</option>
+                                    {Object.values(QueryType).map(value => {
+                                        return <option key={value} value={value}>{value}</option>
+                                    })}
+                                </select>
+                            )
+                        }} />}
+                        {watchType && Component && <Component startDate={watchStartDate} endDate={watchEndDate} />}
+                    </form>
+                </>
+            </WithAuth>
         </PageContent>
 
     );
@@ -116,7 +124,7 @@ function Home(props: IProps) {
 
 Home.getInitialProps = async (ctx: NextPageContext) => {
     const authService = new TokenService();
-    // await authService.authenticateTokenSsr(ctx);
+    await authService.authenticateTokenSsr(ctx);
     return {
         action: undefined
     };
