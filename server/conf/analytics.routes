@@ -1,0 +1,20 @@
+
+### live
+
+# count online user
+GET         /online                 controllers.analytics.QueryController.getOnlineUsers()
+
+# for count event
+GET         /event/clicks           controllers.analytics.QueryController.getClickByPlace()
+
+# count online user for course
+GET         /online/course          controllers.analytics.QueryController.getOnlineUsersByCourseTime()
+
+# sum play for videos
+GET         /video/plays            println("video plays")
+
+#GET         /click-by-place/:place  controllers.analytics.QueryController.getClickByPlace(place)
+
+### batch
+#POST        /posttest              controllers.analytics.OnlineUserController.doTheThing()
+#GET         /online-users-by-course-time  controllers.analytics.QueryController.getOnlineUsersByCourseTime()

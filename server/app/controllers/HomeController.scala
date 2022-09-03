@@ -46,5 +46,4 @@ class HomeController @Inject()(
     //    Ok(views.html.hello(name))
     Ok(res)
   }
-
 }
