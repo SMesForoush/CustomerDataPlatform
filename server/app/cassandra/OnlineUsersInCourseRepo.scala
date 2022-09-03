@@ -12,8 +12,11 @@ class OnlineUsersInCourseRepo @Inject()(cassandraService: CassandraService) {
 
   def getOnlineUsersInCourseCount(request: OnlineUserCourseRequest) = {
     val result = cassandraService.useSession { session =>
+      val course_id = request.course
+      val fromDate = request.fromDate
+      val toDate = request.toDate
       val resultSet = session.execute(SimpleStatement.builder(
-        s"SELECT count(user_id) FROM myorg.online_users_by_course_time WHERE course_id=${course_id} AND event_date=${event_date};"
+        s"SELECT count(user_id) FROM myorg.online_users_by_course_time WHERE course_id=${course_id} AND event_date=<${toDate} AND event_date >=${fromDate};"
       ).build())
 
       val resultAsList = resultSet.asScala
