@@ -6,6 +6,9 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import cassandra._
 import javax.inject._
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
+import play.api.mvc._
 
 @Singleton
 class QueryController @Inject()(
@@ -15,17 +18,16 @@ class QueryController @Inject()(
                                 loginRequiredAction: LoginRequiredAction,
                                 // dfRepo: DfRepo,
                                 // myRepo: MyRepo,
+                                onlineUserController: OnlineUserController,
                                 onlineUsersRepo: OnlineUsersRepo
                               ) extends AbstractController(cc) {
 
   // TODO: use loginRequiredAction for all
   def getOnlineUsers() = Action { implicit request: Request[AnyContent] =>
-    val result = onlineUsersRepo.getOnlineUsersCount()
-    Ok(Json.toJson(result))
-  }
-
-  def test(a: String, b: String) = Action { implicit request: Request[AnyContent] =>
-    Ok(a + b)
+    // val result = onlineUsersRepo.getOnlineUsersCount()
+    // Ok(Json.toJson(result))
+    
+    onlineUserController.onlineUsersInAnInterval(request)
   }
 
   def getOnlineUsersByCourseTime() = loginRequiredAction { implicit request: Request[AnyContent] =>

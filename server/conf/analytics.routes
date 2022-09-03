@@ -4,7 +4,8 @@
 # online users of last hour
 GET         /online-users           controllers.analytics.QueryController.getOnlineUsers()
 
-GET         /click-by-place/:place  controllers.analytics.QueryController.getClickByPlace(place)
+#GET         /click-by-place/:place  controllers.analytics.QueryController.getClickByPlace(place)
 
 ### batch
-GET         /online-users-by-course-time  controllers.analytics.QueryController.getOnlineUsersByCourseTime()
+#POST        /posttest              controllers.analytics.OnlineUserController.doTheThing()
+#GET         /online-users-by-course-time  controllers.analytics.QueryController.getOnlineUsersByCourseTime()
