@@ -14,9 +14,9 @@ import play.api.mvc._
 class QueryController @Inject()(
                                 cc: ControllerComponents,
                                 config: Configuration,
-                                // jwtAction: JWTAction,
+                                 jwtAction: JWTAction,
                                 loginRequiredAction: LoginRequiredAction,
-                                // dfRepo: DfRepo,
+                                 dfRepo: DfRepo,
                                 // myRepo: MyRepo,
                                 onlineUserController: OnlineUserController,
                                 onlineUsersRepo: OnlineUsersRepo
@@ -30,11 +30,11 @@ class QueryController @Inject()(
     onlineUserController.onlineUsersInAnInterval(request)
   }
 
-  def getOnlineUsersByCourseTime() = loginRequiredAction { implicit request: Request[AnyContent] =>
-    Ok("Not implemented")
+  def getOnlineUsersByCourseTime() = loginRequiredAction { implicit request: UserRequest[AnyContent] =>
+    onlineUserController.onlineUsersInAnCourseInAnInterval(request)
   }
 
-  def getClickByPlace(place: String) = Action { implicit request: Request[AnyContent] =>
+  def getClickByPlace() = loginRequiredAction { implicit request: UserRequest[AnyContent] =>
     Ok("Hello" + place)
   }
 

@@ -1,6 +1,6 @@
 package controllers.analytics
 
-import cassandra.OnlineUsersRepo
+import cassandra.{OnlineUsersInCourseRepo, OnlineUsersRepo}
 import play.api._
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -13,7 +13,8 @@ import javax.inject._
 @Singleton
 class OnlineUserController @Inject()(
                                       cc: ControllerComponents,
-                                      onlineUsersRepo: OnlineUsersRepo
+                                      onlineUsersRepo: OnlineUsersRepo,
+                                      onlineUsersInCourseRepo:OnlineUsersInCourseRepo
                                     ) extends AbstractController(cc) {
 
   implicit val ReadOUR: Reads[OnlineUserRequest] = (
@@ -46,7 +47,7 @@ class OnlineUserController @Inject()(
     }
   }
 
-  def onlineUsersInAnCourseInAnInterval() = Action { implicit request: Request[AnyContent] =>
+  def onlineUsersInAnCourseInAnInterval(request: Request[AnyContent]) {
     //      Cast body to json or get empty {}
     val json: JsValue = request.body.asJson.getOrElse(Json.parse("{}"))
     //      Validate json to be Event type.
@@ -54,11 +55,12 @@ class OnlineUserController @Inject()(
     if (req.isError) {
       BadRequest("Not Event Type")
     } else {
-      req.get
-      Ok("created")
+      Ok(Json.obj(onlineUsersInCourseRepo.getOnlineUsersInCourseCount(req.get)))
     }
   }
 }
 
+
 case class OnlineUserRequest(fromDate: String, fromTime: String, toDate: String, toTime: String)
+
 case class OnlineUserCourseRequest(course: String, fromDate: String, fromTime: String, toDate: String, toTime: String)
