@@ -6,6 +6,9 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import cassandra._
 import javax.inject._
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
+import play.api.mvc._
 
 @Singleton
 class QueryController @Inject()(
