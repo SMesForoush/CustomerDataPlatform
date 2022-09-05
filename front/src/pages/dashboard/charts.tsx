@@ -18,7 +18,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import LineChart from '../../components/LineChart';
-import { useForm } from 'react-hook-form';
+import { DefaultValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormInputWithController } from '../../components/FormInput';
 import ClicksOnEvent from '../../components/query/ClicksOnEvent';
@@ -27,6 +27,8 @@ import VideoPlays from '../../components/query/VideoPlays';
 import OnlineUsersForCource from '../../components/query/OnlineUsersForCourse';
 import WithAuth from '../../components/WithAuth';
 import ErrorPage from '../../components/ErrorPage';
+import moment from 'moment';
+import DateInput from '../../components/DateInput';
 
 ChartJS.register(
     CategoryScale,
@@ -49,13 +51,24 @@ enum QueryType {
     videoPlay = 'video play time'
 }
 
-type QueryInput = {
-    startDate: string;
-    endDate: string;
+export type QueryInput = {
+    startHour: number;
+    startMinute: number;
+    startYear: number;
+    startMonth: number;
+    startDay: number;
+    endHour: number;
+    endMinute: number;
+    endYear: number;
+    endMonth: number;
+    endDay: number;
     type: QueryType
 }
 
 export type QueryComponentProps = Omit<QueryInput, 'type'>
+export type ResponseType = {
+    data: { count: number; date: number }[]
+}
 const QueryTypeMapperComponent: Record<QueryType, React.ComponentType<QueryComponentProps>> = {
     [QueryType.clicksOnEvent]: ClicksOnEvent,
     [QueryType.onlineUsers]: OnlineUser,
@@ -64,26 +77,65 @@ const QueryTypeMapperComponent: Record<QueryType, React.ComponentType<QueryCompo
 }
 
 const schema: yup.SchemaOf<QueryInput> = yup.object().shape({
-    startDate: yup.string().required().min(5),
-    endDate: yup.string().required().min(5),
+    startHour: yup.number().min(0).max(23),
+    startMinute: yup.number().min(0).max(59),
+    startYear: yup.number().min(2020).max(moment().year()).required(),
+    startMonth: yup.number().min(1).max(12),
+    startDay: yup.number().min(1).max(30),
+    endHour: yup.number().min(0).max(24),
+    endMinute: yup.number().min(0).max(59),
+    endYear: yup.number().min(2020).max(moment().year()).required(),
+    endMonth: yup.number().min(1).max(59),
+    endDay: yup.number().min(1).max(30),
     type: yup.mixed().oneOf((Object.values(QueryType))).required()
 });
 
+const defaultValues: DefaultValues<QueryInput> = {
+    startDay: undefined,
+    startHour: undefined,
+    startMinute: undefined,
+    startMonth: undefined,
+    startYear: moment().year() - 1,
+    endDay: undefined,
+    endHour: undefined,
+    endMinute: undefined,
+    endMonth: undefined,
+    endYear: moment().year(),
+    type: undefined
+}
+
 function Home(props: IProps) {
-    const { control, watch } = useForm<QueryInput>(
+    const { control, watch, } = useForm<QueryInput>(
         {
             resolver: yupResolver(schema),
-            defaultValues: {
-                startDate: '',
-                endDate: "",
-                type: undefined,
-            }
+            defaultValues
         }
     )
-    const watchEndDate = watch('endDate')
-    const watchStartDate = watch('startDate')
     const watchType = watch('type')
-    
+
+    const [startYear,
+        startMonth,
+        startDay,
+        startHour,
+        startMinute,
+        endYear,
+        endMonth,
+        endDay,
+        endHour,
+        endMinute
+    ] = watch(
+        [
+            "startYear",
+            "startMonth",
+            "startDay",
+            "startHour",
+            "startMinute",
+            "endYear",
+            "endMonth",
+            "endDay",
+            "endHour",
+            "endMinute"
+        ])
     const Component = QueryTypeMapperComponent[watchType]
     return (
         <PageContent>
@@ -95,10 +147,8 @@ function Home(props: IProps) {
                 <>
                     <h2>Complete Form To See Charts.</h2>
                     <form className="flex flex-col space-y-4">
-
-                        <FormInputWithController name='startDate' labelName='Start Date' control={control} type="datetime-local" />
-                        {watchStartDate && <FormInputWithController name='endDate' labelName='End Date' control={control} type="datetime-local" />}
-                        {watchEndDate && <FormInputWithController name='type' labelName='Query Type' control={control} render={(field) => {
+                        <DateInput control={control} watch={watch} />
+                        <FormInputWithController name='type' labelName='Query Type' control={control} render={(field) => {
                             return (
                                 <select {...field}>
                                     <option key={""} value="">not selected</option>
@@ -107,8 +157,19 @@ function Home(props: IProps) {
                                     })}
                                 </select>
                             )
-                        }} />}
-                        {watchType && Component && <Component startDate={watchStartDate} endDate={watchEndDate} />}
+                        }} />
+                        {watchType && Component && <Component
+                            startDay={startDay}
+                            startHour={startHour}
+                            startMinute={startMinute}
+                            startMonth={startMonth}
+                            startYear={startYear}
+                            endDay={endDay}
+                            endHour={endHour}
+                            endMinute={endMinute}
+                            endMonth={endMonth}
+                            endYear={endYear}
+                        />}
                     </form>
                 </>
             </WithAuth>
@@ -119,7 +180,7 @@ function Home(props: IProps) {
 
 Home.getInitialProps = async (ctx: NextPageContext) => {
     const authService = new TokenService();
-    await authService.authenticateTokenSsr(ctx);
+    // await authService.authenticateTokenSsr(ctx);
     return {
         action: undefined
     };

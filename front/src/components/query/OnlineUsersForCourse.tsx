@@ -1,14 +1,12 @@
-import { QueryComponentProps } from "../../pages/dashboard/charts";
+import { QueryComponentProps, ResponseType } from "../../pages/dashboard/charts";
 import * as yup from 'yup'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormInputWithController } from "../FormInput";
 import { useCallback, useState } from "react";
 import FetchService from "../../services/Fetch.service";
-import extractDate from "../../utils/extractDate";
 import LineChart from "../LineChart";
 import getLineChartReadable, { Res } from "../../utils/getChartReadable";
-import humanReadableTime from "../../utils/humanReadableTime";
 
 type QueryInput = {
     course: string;
@@ -18,11 +16,8 @@ const schema: yup.SchemaOf<QueryInput> = yup.object().shape({
 });
 
 
-type ResponseType = {
-    data: { count: number; date: string }[]
-}
 
-export default function OnlineUsersForCource({ startDate, endDate }: QueryComponentProps): JSX.Element {
+export default function OnlineUsersForCource(date: QueryComponentProps): JSX.Element {
     const [response, setResponse] = useState<Res>(null)
     const {
         control,
@@ -42,14 +37,13 @@ export default function OnlineUsersForCource({ startDate, endDate }: QueryCompon
         } = await FetchService.isofetch<ResponseType>({
             url: '/query/online/course',
             data: {
-                start: extractDate(startDate),
-                end: extractDate(endDate),
+                ...date,
                 course: watchCourse,
             },
             type: 'POST'
         });
-        setResponse(getLineChartReadable({ data, start: startDate, end: endDate }))
-    }, [startDate, endDate, watchCourse])
+        setResponse(getLineChartReadable({ data, date }))
+    }, [date, watchCourse])
 
     return (
         <>
@@ -57,7 +51,7 @@ export default function OnlineUsersForCource({ startDate, endDate }: QueryCompon
             {watchCourse &&
                 <button type="button" value="query" onClick={onSubmit}>Submit </button>
             }
-            {response && <LineChart data={response.data} labels={response.labels.map(date => humanReadableTime(date))} />}
+            {response && <LineChart data={response.data} labels={response.labels} />}
         </>
     )
 }
