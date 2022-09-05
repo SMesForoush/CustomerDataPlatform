@@ -7,6 +7,7 @@ import { useCallback, useState } from "react";
 import FetchService from "../../services/Fetch.service";
 import extractDate from "../../utils/extractDate";
 import LineChart from "../LineChart";
+import getLineChartReadable, { Res } from "../../utils/getChartReadable";
 import humanReadableTime from "../../utils/humanReadableTime";
 
 type QueryInput = {
@@ -22,7 +23,7 @@ type ResponseType = {
 }
 
 export default function OnlineUsersForCource({ startDate, endDate }: QueryComponentProps): JSX.Element {
-    const [response, setResponse] = useState<ResponseType['data']>(null)
+    const [response, setResponse] = useState<Res>(null)
     const {
         control,
         watch,
@@ -47,7 +48,7 @@ export default function OnlineUsersForCource({ startDate, endDate }: QueryCompon
             },
             type: 'POST'
         });
-        setResponse(data)
+        setResponse(getLineChartReadable({ data, start: startDate, end: endDate }))
     }, [startDate, endDate, watchCourse])
 
     return (
@@ -56,7 +57,7 @@ export default function OnlineUsersForCource({ startDate, endDate }: QueryCompon
             {watchCourse &&
                 <button type="button" value="query" onClick={onSubmit}>Submit </button>
             }
-            {response && <LineChart data={response.map(click => click.count)} labels={response.map(click => humanReadableTime(click.date))} />}
+            {response && <LineChart data={response.data} labels={response.labels.map(date => humanReadableTime(date))} />}
         </>
     )
 }

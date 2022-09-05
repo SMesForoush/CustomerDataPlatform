@@ -12,7 +12,7 @@ import javax.inject._
 
 @Singleton
 class AuthController @Inject()(cc: ControllerComponents, jwtService: JWTService, jwtAction: JWTAction) extends AbstractController(cc) {
-  private val redisSession = new JedisPool("localhost", 6379)
+  private val redisSession = new JedisPool("redis-db", 6379)
 
   val loginForm: Form[(String, String)] = Form(
     tuple(

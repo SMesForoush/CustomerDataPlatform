@@ -21,15 +21,15 @@ class QueryController @Inject()(
                                  onlineUsersRepo: OnlineUsersRepo
                                ) extends AbstractController(cc) {
 
-  def getOnlineUsers() = loginRequiredAction { implicit request: UserRequest[AnyContent] =>
+  def getOnlineUsers() = jwtAction { implicit request: UserRequest[AnyContent] =>
     onlineUserController.onlineUsersInAnInterval(request.request)
   }
 
-  def getOnlineUsersByCourseTime() = loginRequiredAction { implicit request: UserRequest[AnyContent] =>
+  def getOnlineUsersByCourseTime() = jwtAction { implicit request: UserRequest[AnyContent] =>
     onlineUserController.onlineUsersInAnCourseInAnInterval(request.request)
   }
 
-  def getClickPerEvent() = loginRequiredAction { implicit request: UserRequest[AnyContent] =>
+  def getClickPerEvent() = jwtAction { implicit request: UserRequest[AnyContent] =>
     onlineUserController.clicksPerEvent(request.request)
   }
 

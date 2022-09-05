@@ -50,7 +50,11 @@ class OnlineUserController @Inject()(
     }
     val ur = req.get
     val response = onlineUsersRepo.getOnlineUsersCount(ur)
-    Ok(Json.toJson(response))
+    Ok(
+      Json.obj(
+        "data" -> Json.toJson(response)
+      )
+      )
 
   }
 
@@ -95,7 +99,7 @@ class OnlineUserController @Inject()(
 
 case class SimpleRequest(start: String, end: String)
 
-case class SimpleRequestForCourse(start: String, end: String, course: String)
+case class SimpleRequestForCourse(course: String, start: String, end: String)
 
 case class LineChartResponse(count: Long, date: String)
 

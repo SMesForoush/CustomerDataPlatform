@@ -12,7 +12,7 @@
 GET         /                    controllers.HomeController.index()
 GET         /explore             controllers.HomeController.explore()
 GET         /tutorial            controllers.HomeController.tutorial()
-GET         /sampleQuery         controllers.HomeController.sampleQuery()
+#GET         /sampleQuery         controllers.HomeController.sampleQuery()
 GET         /hello               controllers.HomeController.hello(name: String ?= "anybody")
 POST        /event/create        controllers.EventController.create()
 

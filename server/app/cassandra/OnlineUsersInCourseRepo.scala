@@ -14,12 +14,18 @@ class OnlineUsersInCourseRepo @Inject()(cassandraService: CassandraService) {
       val course_id = request.course
       val start = request.start
       val end = request.end
+      val query = s"SELECT count(user_id) as count, event_date as date FROM online_users_by_course_time WHERE course_id='${course_id}' AND event_date<'${end}' AND event_date>'${start}' ALLOW FILTERING;"
+      println(query)
       val resultSet = session.execute(SimpleStatement.builder(
-        s"SELECT count(user_id) as count, event_date as date FROM online_users_by_course_time WHERE course_id=${course_id} AND event_date=<${end} AND event_date>=${start};"
+        query
       ).build())
 
-      val resultAsList = resultSet.asScala
-      resultAsList.map(rowToValue(_)).toList
+      try {  
+        val resultAsList = resultSet.asScala
+        resultAsList.map(rowToValue(_)).toList
+      } catch {
+      case x: Exception => List[LineChartResponse]()
+    }
     }
     result
   }
@@ -30,7 +36,7 @@ class OnlineUsersInCourseRepo @Inject()(cassandraService: CassandraService) {
     if (row.isNull(countCol) || row.isNull(dateCol)) {
       // throw exception
     }
-    LineChartResponse(row.getLong(countCol), row.getString(dateCol))
+    LineChartResponse(row.getLong(countCol), row.getLocalDate(dateCol).toString())
   }
 }
 

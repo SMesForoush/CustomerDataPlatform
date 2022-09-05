@@ -38,11 +38,6 @@ ChartJS.register(
     Legend
 );
 
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-const data = labels.map(() => Math.random() * 100);
-
-
 interface IProps {
     action: string;
 }
@@ -75,7 +70,6 @@ const schema: yup.SchemaOf<QueryInput> = yup.object().shape({
 });
 
 function Home(props: IProps) {
-    const x = [1, 2, 3, 4]
     const { control, watch } = useForm<QueryInput>(
         {
             resolver: yupResolver(schema),
@@ -89,6 +83,7 @@ function Home(props: IProps) {
     const watchEndDate = watch('endDate')
     const watchStartDate = watch('startDate')
     const watchType = watch('type')
+    
     const Component = QueryTypeMapperComponent[watchType]
     return (
         <PageContent>

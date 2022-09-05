@@ -2,16 +2,16 @@
 ### live
 
 # count online user
-GET         /online                 controllers.analytics.QueryController.getOnlineUsers()
+POST         /online                 controllers.analytics.QueryController.getOnlineUsers()
 
 # for count event
-GET         /event/clicks           controllers.analytics.QueryController.getClickByPlace()
+POST         /event/clicks           controllers.analytics.QueryController.getClickPerEvent()
 
 # count online user for course
-GET         /online/course          controllers.analytics.QueryController.getOnlineUsersByCourseTime()
+POST         /online/course          controllers.analytics.QueryController.getOnlineUsersByCourseTime()
 
 # sum play for videos
-GET         /video/plays            println("video plays")
+#GET         /video/plays            println("video plays")
 
 #GET         /click-by-place/:place  controllers.analytics.QueryController.getClickByPlace(place)
 

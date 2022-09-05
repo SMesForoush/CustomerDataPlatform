@@ -33,7 +33,6 @@ class CassandraService @Inject()(config: Configuration) {
   def useSession[A](f: CqlSession => A): A = {
     val session = cqlSession
     val result = f(session)
-    session.close()
     result
   }
 
