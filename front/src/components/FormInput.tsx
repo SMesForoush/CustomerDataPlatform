@@ -1,23 +1,21 @@
 import classNames from 'classnames';
 import { InputHTMLAttributes } from 'react';
-import { Control, ControllerRenderProps, FieldPath, useController } from 'react-hook-form';
+import { Control, ControllerRenderProps, useController } from 'react-hook-form';
 
-export type FormInputWithControllerProps<T, TName extends FieldPath<T>> = InputHTMLAttributes<HTMLInputElement> & {
-  name: TName;
-  control: Control<T>;
+export type FormInputWithControllerProps = InputHTMLAttributes<HTMLInputElement> & {
+  name: string;
+  control: Control<any>;
   labelName?: string;
-  render?: (field: ControllerRenderProps<T, TName>) => JSX.Element
-  horizental?: boolean
+  render?: (field: ControllerRenderProps) => JSX.Element
 };
 
-export function FormInputWithController<T, TName extends FieldPath<T>>({
+export function FormInputWithController({
   className = '',
   control,
   labelName = '',
   render,
-  horizental,
   ...props
-}: FormInputWithControllerProps<T, TName>): JSX.Element {
+}: FormInputWithControllerProps): JSX.Element {
   const {
     field,
     formState: { errors }
@@ -26,16 +24,11 @@ export function FormInputWithController<T, TName extends FieldPath<T>>({
     control
   });
   return (
-    <label className={classNames(
-      "space-x-2 space-y-2",
-      {
-        "flex": horizental
-      }
-    )}>
+    <label>
       {labelName && <div>{labelName}</div>}
       {render && render(field)}
-      {!render && <input className={classNames(className, "bg-blue-50")} {...(field as any)} {...props} />}
-      {errors[props.name]?.message && <div>{errors[props.name]?.message as any}</div>}
+      {!render && <input className={classNames(className, "bg-blue-50")} {...field} {...props} />}
+      {errors[props.name]?.message && <div>{errors[props.name]?.message.toString()}</div>}
     </label>
   );
 }
