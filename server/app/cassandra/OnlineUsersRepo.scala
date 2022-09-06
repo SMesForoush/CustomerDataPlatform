@@ -1,7 +1,7 @@
 package cassandra
 
 import com.datastax.oss.driver.api.core.cql._
-import controllers.analytics.{SimpleRequest, LineChartResponse}
+import controllers.analytics.{LineChartResponse, SimpleRequest}
 
 import javax.inject.Inject
 import scala.jdk.CollectionConverters._
@@ -12,7 +12,7 @@ class OnlineUsersRepo @Inject()(cassandraService: CassandraService) {
   def getOnlineUsersCount(onlineUserRequest: SimpleRequest): List[LineChartResponse] = {
     val start = onlineUserRequest.start
     val end = onlineUserRequest.end
-    val query = s"SELECT count(user_id) as count, event_date as date FROM online_users WHERE event_date<'${end}' AND event_date>'${start}' ALLOW FILTERING;"
+    val query = s"SELECT count(user_id) as count, event_date as date FROM online_users WHERE event_date<'${end}' AND event_date>'${start}' GROUP BY event_date ALLOW FILTERING;"
     println(query)
     val result = cassandraService.useSession[List[LineChartResponse]] { session =>
       val resultSet = session.execute(SimpleStatement.builder(
