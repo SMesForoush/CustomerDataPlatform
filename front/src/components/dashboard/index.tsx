@@ -19,8 +19,8 @@ export function Dashboard(): JSX.Element {
             <Link href="/dashboard/grafana">
               See grafana dashboard
             </Link>
-	  </li>
-	  <li>
+          </li>
+          <li>
             <Link href="/dashboard/charts">
               See offline query dashboard
             </Link>
