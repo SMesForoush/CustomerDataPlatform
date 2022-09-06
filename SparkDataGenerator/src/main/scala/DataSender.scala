@@ -1,6 +1,6 @@
-//import com.github.nscala_time.time.Imports.DateTime
+import com.github.nscala_time.time.Imports.DateTime
+
 import java.util.Properties
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
 class DataSender extends App{
   val props: Properties = new Properties()
@@ -14,8 +14,8 @@ class DataSender extends App{
     val event_types = List("close_courseware", "play_video", "click_about", "click_forum", "problem_check_incorrect", "create_thread", "seek_video",
       "problem_check_correct", "reset_problem", "create_comment", "load_video", "problem_get", "pause_video", "delete_comment", "problem_check",
       "click_courseware", "stop_video", "problem_save", "delete_thread", "click_progress", "click_info", "close_forum", "close_info")
-//    val date_event = DateTime.now
-//    val timestamp = date_event.getMillis
+    val date_event = DateTime.now
+    val timestamp = date_event.getMillis
 
     val r = scala.util.Random
     val event = event_types(r.nextInt(event_types.size))
