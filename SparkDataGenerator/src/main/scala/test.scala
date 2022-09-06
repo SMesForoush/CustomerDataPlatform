@@ -33,9 +33,11 @@ object KafkaProducerApp extends App {
   val producer = new KafkaProducer[String, String](props)
   val topic = "text_topic"
   var counter = 0
-  val maxRecord = -1 // set if you want get limit record
-  val intervalRecord = -1 // set with ms
-  val intervalFlushRecord = 10 // set with ms
+
+  val argument = args.map(_.toInt)
+  val maxRecord =  argument(0) // set if you want get limit record -> -1
+  val intervalRecord = argument(1) // set with ns  -> -1
+  val intervalFlushRecord = argument(2) // set with ms -> 100
   new Thread(() => {
     var last = System.nanoTime();
     var lastCounter = counter
@@ -43,7 +45,7 @@ object KafkaProducerApp extends App {
       val now = System.nanoTime();
       //      println((1.0 * now - 1.0 * last) / 1000)
       if ((1.0 * now - 1.0 * last) / 1000 > intervalFlushRecord) {
-        println("heree", counter - lastCounter)
+//        println("heree", counter - lastCounter)
         lastCounter = counter
         producer.flush()
         last = now
@@ -71,7 +73,7 @@ object KafkaProducerApp extends App {
           break
         }
         if (intervalRecord != -1 && intervalRecord > 0) {
-          Thread.sleep(intervalRecord)
+          Thread.sleep(0, intervalRecord)
         }
       }
     }
