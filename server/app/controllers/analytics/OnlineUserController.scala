@@ -20,7 +20,7 @@ class OnlineUserController @Inject()(
 
   implicit val LineChartWrite: Writes[LineChartResponse] = (
     (JsPath \ "count").write[Long] and
-      (JsPath \ "date").write[String]
+      (JsPath \ "date").write[Long]
     ) (unlift(LineChartResponse.unapply))
 
   implicit val PieChartWrite: Writes[PieChartResponse] = (
@@ -29,16 +29,48 @@ class OnlineUserController @Inject()(
     ) (unlift(PieChartResponse.unapply))
 
   implicit val ReadOUR: Reads[SimpleRequest] = (
-    (JsPath \ "start").read[String] and
-      (JsPath \ "end").read[String]
+    (JsPath \ "startYear").read[Int] and
+      (JsPath \ "startMonth").read[Int] and
+      (JsPath \ "startDay").read[Int] and
+      (JsPath \ "startHour").read[Int] and
+      (JsPath \ "startMinute").read[Int] and
+      (JsPath \ "endYear").read[Int] and
+      (JsPath \ "endMonth").read[Int] and
+      (JsPath \ "endDay").read[Int] and
+      (JsPath \ "endHour").read[Int] and
+      (JsPath \ "endMinute").read[Int]
     ) (SimpleRequest.apply _)
 
-  implicit val ReadOUCR: Reads[SimpleRequestForCourse] = (
+  implicit val ReadOURC: Reads[TempRequestForCourse] = (
     (JsPath \ "course").read[String] and
-      (JsPath \ "start").read[String] and
-      (JsPath \ "end").read[String]
-    ) (SimpleRequestForCourse.apply _)
+      (JsPath \ "startYear").read[Int] and
+      (JsPath \ "startMonth").read[Int] and
+      (JsPath \ "startDay").read[Int] and
+      (JsPath \ "startHour").read[Int] and
+      (JsPath \ "startMinute").read[Int] and
+      (JsPath \ "endYear").read[Int] and
+      (JsPath \ "endMonth").read[Int] and
+      (JsPath \ "endDay").read[Int] and
+      (JsPath \ "endHour").read[Int] and
+      (JsPath \ "endMinute").read[Int]
+    ) (TempRequestForCourse.apply _)
 
+  implicit def TempToCourseReq(temp: TempRequestForCourse): SimpleRequestForCourse = {
+    SimpleRequestForCourse(
+      course = temp.course, simpleRequest = SimpleRequest(
+        startYear = temp.startYear,
+        startMonth = temp.startMonth,
+        startDay = temp.startDay,
+        startHour = temp.startHour,
+        startMinute = temp.startMinute,
+        endYear = temp.endYear,
+        endMonth = temp.endMonth,
+        endDay = temp.endDay,
+        endHour = temp.endHour,
+        endMinute = temp.endMinute
+      )
+    )
+  }
 
   def onlineUsersInAnInterval(request: Request[AnyContent]) = {
     //      Cast body to json or get empty {}
@@ -54,7 +86,7 @@ class OnlineUserController @Inject()(
       Json.obj(
         "data" -> Json.toJson(response)
       )
-      )
+    )
 
   }
 
@@ -62,12 +94,12 @@ class OnlineUserController @Inject()(
     //      Cast body to json or get empty {}
     val json: JsValue = request.body.asJson.getOrElse(Json.parse("{}"))
     //      Validate json to be Event type.
-    val req: JsResult[SimpleRequestForCourse] = json.validate[SimpleRequestForCourse]
+    val req: JsResult[TempRequestForCourse] = json.validate[TempRequestForCourse]
     if (req.isError) {
       BadRequest("Not Event Type")
     }
 
-    val parsed = req.get
+    val parsed: SimpleRequestForCourse = req.get
     val response = onlineUsersInCourseRepo.getOnlineUsersInCourseCount(parsed)
     Ok(
       Json.obj(
@@ -97,10 +129,38 @@ class OnlineUserController @Inject()(
 }
 
 
-case class SimpleRequest(start: String, end: String)
+case class SimpleRequest(
+                          startYear: Int,
+                          startMonth: Int,
+                          startDay: Int,
+                          startHour: Int,
+                          startMinute: Int,
+                          endYear: Int,
+                          endMonth: Int,
+                          endDay: Int,
+                          endHour: Int,
+                          endMinute: Int,
+                        )
 
-case class SimpleRequestForCourse(course: String, start: String, end: String)
+case class SimpleRequestForCourse(
+                                   course: String,
+                                   simpleRequest: SimpleRequest
+                                 )
 
-case class LineChartResponse(count: Long, date: String)
+case class TempRequestForCourse(
+                                 course: String,
+                                 startYear: Int,
+                                 startMonth: Int,
+                                 startDay: Int,
+                                 startHour: Int,
+                                 startMinute: Int,
+                                 endYear: Int,
+                                 endMonth: Int,
+                                 endDay: Int,
+                                 endHour: Int,
+                                 endMinute: Int,
+                               )
+
+case class LineChartResponse(count: Long, date: Long)
 
 case class PieChartResponse(count: Long, event: String)

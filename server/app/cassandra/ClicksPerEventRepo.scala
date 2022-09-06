@@ -10,9 +10,8 @@ import scala.language.implicitConversions
 class ClicksPerEventRepo @Inject()(cassandraService: CassandraService) {
 
   def getClicksPerEventCount(onlineUserRequest: SimpleRequest): List[PieChartResponse] = {
-    val start = onlineUserRequest.start
-    val end = onlineUserRequest.end
-    val query = s"SELECT count(*) as count, event_place as event FROM click_by_place WHERE event_date<'${end}' AND event_date>'${start}' GROUP BY event_place, event_date ALLOW FILTERING;"
+    val (conditionDate, date) = cassandraService.queryOnDate(onlineUserRequest)
+    val query = s"SELECT count(*) as count, event_place as event FROM click_by_place WHERE ${conditionDate} GROUP BY event_place, ${date} ALLOW FILTERING;"
     println(query)
     val result = cassandraService.useSession[List[PieChartResponse]] { session =>
       val resultSet = session.execute(SimpleStatement.builder(

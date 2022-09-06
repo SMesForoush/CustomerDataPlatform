@@ -1,6 +1,7 @@
 package cassandra
 
 import com.datastax.oss.driver.api.core.CqlSession
+import controllers.analytics.SimpleRequest
 import play.api.Configuration
 
 import java.net.{InetSocketAddress, URL}
@@ -28,6 +29,36 @@ class CassandraService @Inject()(config: Configuration) {
       .withAuthCredentials(username, password)
       .withLocalDatacenter("datacenter1")
       .build()
+
+  def queryOnDate(date: SimpleRequest): (String, String) = {
+    var condition = ""
+    if (date.startYear == date.endYear) {
+      condition += s" year=${date.endYear}"
+    } else {
+      condition += s" year>${date.startYear} AND year<${date.endYear}"
+      return (condition, "year")
+    }
+    if (date.startMonth == date.endMonth) {
+      condition += s" AND month=${date.startMonth}"
+    } else {
+      condition += s" AND month>${date.startMonth} AND month<${date.startMonth}"
+      return (condition, "month")
+    }
+    if (date.startDay == date.endDay) {
+      condition += s" AND day=${date.startDay}"
+    } else {
+      condition += s" AND day>${date.startDay} AND day<${date.endDay}"
+      return (condition, "day")
+    }
+    if (date.startHour == date.startHour) {
+      condition += s" AND hour=${date.startHour}"
+    } else {
+      condition += s" AND hour>${date.startHour} AND hour<${date.endHour}"
+      return (condition, "hour")
+    }
+    condition += s" AND minute>${date.startMinute} AND minute<${date.endMinute}"
+    (condition, "minute")
+  }
 
 
   def useSession[A](f: CqlSession => A): A = {

@@ -10,9 +10,8 @@ import scala.language.implicitConversions
 class OnlineUsersRepo @Inject()(cassandraService: CassandraService) {
 
   def getOnlineUsersCount(onlineUserRequest: SimpleRequest): List[LineChartResponse] = {
-    val start = onlineUserRequest.start
-    val end = onlineUserRequest.end
-    val query = s"SELECT count(user_id) as count, event_date as date FROM online_users WHERE event_date<'${end}' AND event_date>'${start}' ALLOW FILTERING;"
+    val (dateCondition, date) = cassandraService.queryOnDate(onlineUserRequest)
+    val query = s"SELECT count(user_id) as count, ${date} as date FROM online_users WHERE ${dateCondition} GROUP BY ${date} ALLOW FILTERING;"
     println(query)
     val result = cassandraService.useSession[List[LineChartResponse]] { session =>
       val resultSet = session.execute(SimpleStatement.builder(
@@ -21,9 +20,9 @@ class OnlineUsersRepo @Inject()(cassandraService: CassandraService) {
       try {
         val resultAsList = resultSet.asScala
         resultAsList.map(rowToValue(_)).toList
-    } catch {
-      case x: Exception => List[LineChartResponse]()
-    }
+      } catch {
+        case x: Exception => List[LineChartResponse]()
+      }
     }
     result
   }
@@ -32,12 +31,9 @@ class OnlineUsersRepo @Inject()(cassandraService: CassandraService) {
     val countColName = "count";
     val eventDateColName = "date";
     if (row.isNull(countColName) || row.isNull(eventDateColName)) {
-      // throw exception
-   //   println(row.isNull(countColName))
-     // println(row.isNull(eventDateColName))
-      LineChartResponse(row.getLong(countColName), row.getLocalDate(eventDateColName).toString())
+      LineChartResponse(row.getLong(countColName), row.getLong(eventDateColName))
     } else {
-    LineChartResponse(row.getLong(countColName), row.getLocalDate(eventDateColName).toString())
+      LineChartResponse(row.getLong(countColName), row.getLong(eventDateColName))
     }
   }
 }
