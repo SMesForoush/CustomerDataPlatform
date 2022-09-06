@@ -14,7 +14,7 @@ class OnlineUsersInCourseRepo @Inject()(cassandraService: CassandraService) {
       val course_id = request.course
       val start = request.start
       val end = request.end
-      val query = s"SELECT count(user_id) as count, event_date as date FROM online_users_by_course_time WHERE course_id='${course_id}' AND event_date<'${end}' AND event_date>'${start}' ALLOW FILTERING;"
+      val query = s"SELECT count(user_id) as count, event_date as date FROM online_users_by_course_time WHERE course_id='${course_id}' AND event_date<'${end}' AND event_date>'${start}' GROUP BY event_date, course_id ALLOW FILTERING;"
       println(query)
       val resultSet = session.execute(SimpleStatement.builder(
         query

@@ -8,7 +8,7 @@
     "port": "9042",
     "maxNumberOfRecordsInBatch": "10",
     "loadBalancing.localDc": "datacenter1",
-    "topic.myorg_topic.myorg.online_users.mapping": "event_time=value.event_time, year=value.year, month=value.month, day=value.day, hour=value.hour, minute=value.minute, user_id=value.user_id",
+    "topic.myorg_topic.myorg.online_users.mapping": "event_time=value.event_time, event_date=value.event_date, user_id=value.user_id",
     "topic.myorg_topic.myorg.online_users.consistencyLevel": "LOCAL_QUORUM",
     "topic.myorg_topic.myorg.online_users.deletesEnabled": false,
     "auth.provider":"PLAIN",
