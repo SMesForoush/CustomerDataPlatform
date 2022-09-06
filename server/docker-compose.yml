@@ -25,7 +25,6 @@ services:
 
 volumes:
   cache:
-    driver: local
 
 networks:
   app:
